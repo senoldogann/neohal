@@ -1,0 +1,407 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:NeoHal.Desktop.ViewModels"
+             x:Class="NeoHal.Desktop.Views.BackupView"
+             x:DataType="vm:BackupViewModel">
+    
+    <Grid RowDefinitions="Auto,*" Margin="20">
+        <!-- Header -->
+        <Border Grid.Row="0" 
+                Background="{DynamicResource BackgroundMediumBrush}" 
+                CornerRadius="8" 
+                Padding="20" 
+                Margin="0,0,0,20">
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel>
+                    <TextBlock Text="💾 Veritabanı Yedekleme" 
+                               FontSize="24" 
+                               FontWeight="Bold" 
+                               Foreground="{DynamicResource TextPrimaryBrush}"/>
+                    <TextBlock Text="{Binding StatusMessage}" 
+                               FontSize="14" 
+                               Foreground="{DynamicResource TextSecondaryBrush}" 
+                               Margin="0,5,0,0"/>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+                    <Button Content="🔄 Yenile" 
+                            Command="{Binding LoadDataCommand}"
+                            Classes="secondary"/>
+                    <Button Content="➕ Yeni Yedek" 
+                            Command="{Binding CreateBackupCommand}"
+                            IsEnabled="{Binding !IsBackupInProgress}"
+                            Classes="primary"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+        
+        <!-- Content -->
+        <TabControl Grid.Row="1">
+            <!-- Yedekler Tab -->
+            <TabItem Header="📁 Yedekler">
+                <Grid ColumnDefinitions="*,350" Margin="0,10,0,0">
+                    <!-- Yedek Listesi -->
+                    <Border Background="{DynamicResource BackgroundMediumBrush}" CornerRadius="8" Padding="15" Margin="0,0,10,0">
+                        <Grid RowDefinitions="Auto,*">
+                            <TextBlock Text="Yedek Listesi" 
+                                       FontSize="16" 
+                                       FontWeight="SemiBold" 
+                                       Foreground="{DynamicResource TextPrimaryBrush}"
+                                       Margin="0,0,0,15"/>
+                            
+                            <DataGrid Grid.Row="1"
+                                      ItemsSource="{Binding Yedekler}"
+                                      SelectedItem="{Binding SelectedYedek}"
+                                      AutoGenerateColumns="False"
+                                      IsReadOnly="True"
+                                      GridLinesVisibility="Horizontal"
+                                      Background="Transparent"
+                                      RowBackground="White">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Tarih" 
+                                                        Binding="{Binding OlusturmaTarihi, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}" 
+                                                        Width="140"/>
+                                    <DataGridTextColumn Header="Dosya Adı" 
+                                                        Binding="{Binding DosyaAdi}" 
+                                                        Width="*"/>
+                                    <DataGridTextColumn Header="Boyut" 
+                                                        Binding="{Binding DosyaBoyutu, StringFormat='{}{0:N0} B'}" 
+                                                        Width="100"/>
+                                    <DataGridTextColumn Header="Tür" 
+                                                        Binding="{Binding Tur}" 
+                                                        Width="80"/>
+                                    <DataGridTextColumn Header="Durum" 
+                                                        Binding="{Binding Durum}" 
+                                                        Width="80"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </Border>
+                    
+                    <!-- Yedek Detayları ve İşlemler -->
+                    <Border Grid.Column="1" Background="{DynamicResource BackgroundMediumBrush}" CornerRadius="8" Padding="15">
+                        <ScrollViewer>
+                            <StackPanel Spacing="15">
+                                <!-- Yeni Yedek Oluştur -->
+                                <Border Background="White" CornerRadius="6" Padding="15" BorderBrush="#E0E0E0" BorderThickness="1">
+                                    <StackPanel Spacing="10">
+                                        <TextBlock Text="Yeni Yedek Oluştur" 
+                                                   FontWeight="SemiBold" 
+                                                   Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                        <TextBox Watermark="Açıklama (isteğe bağlı)" 
+                                                 Text="{Binding YedekAciklama}"/>
+                                        <Button Content="💾 Yedek Al" 
+                                                Command="{Binding CreateBackupCommand}"
+                                                IsEnabled="{Binding !IsBackupInProgress}"
+                                                HorizontalAlignment="Stretch"
+                                                Classes="primary"/>
+                                    </StackPanel>
+                                </Border>
+                                
+                                <!-- Seçili Yedek İşlemleri -->
+                                <Border Background="White" 
+                                        CornerRadius="6" 
+                                        Padding="15"
+                                        BorderBrush="#E0E0E0" BorderThickness="1"
+                                        IsVisible="{Binding SelectedYedek, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                    <StackPanel Spacing="10">
+                                        <TextBlock Text="Seçili Yedek" 
+                                                   FontWeight="SemiBold" 
+                                                   Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                        
+                                        <StackPanel Spacing="5">
+                                            <TextBlock Text="{Binding SelectedYedek.DosyaAdi}" 
+                                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                                       FontSize="12"/>
+                                            <TextBlock Foreground="{DynamicResource TextMutedBrush}" FontSize="11">
+                                                <Run Text="Oluşturma: "/>
+                                                <Run Text="{Binding SelectedYedek.OlusturmaTarihi, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}"/>
+                                            </TextBlock>
+                                            <TextBlock Foreground="{DynamicResource TextMutedBrush}" FontSize="11">
+                                                <Run Text="Doğrulandı: "/>
+                                                <Run Text="{Binding SelectedYedek.Dogrulandi}"/>
+                                            </TextBlock>
+                                        </StackPanel>
+                                        
+                                        <Separator Background="#E0E0E0" Margin="0,5"/>
+                                        
+                                        <Button Content="♻️ Geri Yükle" 
+                                                Command="{Binding RestoreBackupCommand}"
+                                                IsEnabled="{Binding !IsBackupInProgress}"
+                                                HorizontalAlignment="Stretch"
+                                                Classes="warning"/>
+                                        <Button Content="✓ Doğrula" 
+                                                Command="{Binding VerifyBackupCommand}"
+                                                HorizontalAlignment="Stretch"
+                                                Classes="secondary"/>
+                                        <Button Content="📤 Dışa Aktar" 
+                                                Command="{Binding ExportBackupCommand}"
+                                                HorizontalAlignment="Stretch"
+                                                Classes="secondary"/>
+                                        <Button Content="🗑️ Sil" 
+                                                Command="{Binding DeleteBackupCommand}"
+                                                HorizontalAlignment="Stretch"
+                                                Classes="danger"/>
+                                    </StackPanel>
+                                </Border>
+                                
+                                <!-- İstatistikler -->
+                                <Border Background="White" CornerRadius="6" Padding="15" BorderBrush="#E0E0E0" BorderThickness="1">
+                                    <StackPanel Spacing="10">
+                                        <TextBlock Text="İstatistikler" 
+                                                   FontWeight="SemiBold" 
+                                                   Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                        
+                                        <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto" Margin="0,5,0,0">
+                                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Toplam Yedek:" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Istatistikler.ToplamYedekSayisi}" Foreground="{DynamicResource TextPrimaryBrush}" HorizontalAlignment="Right"/>
+                                            
+                                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Başarılı:" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Istatistikler.BasariliYedekSayisi}" Foreground="#22C55E" HorizontalAlignment="Right"/>
+                                            
+                                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Hatalı:" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Istatistikler.HataliYedekSayisi}" Foreground="#EF4444" HorizontalAlignment="Right"/>
+                                            
+                                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Bugün:" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Istatistikler.BugunYedekSayisi}" Foreground="{DynamicResource TextPrimaryBrush}" HorizontalAlignment="Right"/>
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
+            </TabItem>
+            
+            <!-- Ayarlar Tab -->
+            <TabItem Header="⚙️ Ayarlar">
+                <ScrollViewer Margin="0,10,0,0">
+                    <StackPanel Spacing="15" MaxWidth="600" HorizontalAlignment="Left">
+                        <!-- Otomatik Yedekleme -->
+                        <Border Background="{DynamicResource BackgroundMediumBrush}" CornerRadius="8" Padding="20">
+                            <StackPanel Spacing="15">
+                                <TextBlock Text="Otomatik Yedekleme" 
+                                           FontSize="16" 
+                                           FontWeight="SemiBold" 
+                                           Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                
+                                <CheckBox Content="Otomatik yedeklemeyi etkinleştir" 
+                                          IsChecked="{Binding Ayarlar.OtomatikYedeklemeAktif}"/>
+                                
+                                <Grid ColumnDefinitions="120,*" RowDefinitions="Auto,Auto,Auto" Margin="0,10,0,0">
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Zamanlama:" 
+                                               VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                    <ComboBox Grid.Row="0" Grid.Column="1" 
+                                              ItemsSource="{Binding ZamanlamaSecenekleri}"
+                                              SelectedIndex="{Binding SelectedZamanlamaIndex}"
+                                              Width="200" HorizontalAlignment="Left"/>
+                                    
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Saat:" 
+                                               VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,10,0,0"/>
+                                    <TextBox Grid.Row="1" Grid.Column="1" 
+                                             Text="{Binding Ayarlar.YedeklemeSaati, StringFormat='{}{0:HH:mm}'}"
+                                             Width="100" HorizontalAlignment="Left" Margin="0,10,0,0"/>
+                                    
+                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Saklanacak:" 
+                                               VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,10,0,0"/>
+                                    <NumericUpDown Grid.Row="2" Grid.Column="1" 
+                                                   Value="{Binding Ayarlar.SaklanacakYedekSayisi}"
+                                                   Minimum="1" Maximum="100"
+                                                   Width="100" HorizontalAlignment="Left" Margin="0,10,0,0"/>
+                                </Grid>
+                                
+                                <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,10,0,0">
+                                    <Button Command="{Binding ToggleSchedulerCommand}" Classes="primary">
+                                        <StackPanel Orientation="Horizontal" Spacing="5">
+                                            <TextBlock Text="▶ Başlat" IsVisible="{Binding !IsSchedulerRunning}"/>
+                                            <TextBlock Text="⏹ Durdur" IsVisible="{Binding IsSchedulerRunning}"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <TextBlock Text="Çalışıyor" 
+                                               Foreground="#22C55E" 
+                                               VerticalAlignment="Center"
+                                               IsVisible="{Binding IsSchedulerRunning}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                        
+                        <!-- Sıkıştırma -->
+                        <Border Background="{DynamicResource BackgroundMediumBrush}" CornerRadius="8" Padding="20">
+                            <StackPanel Spacing="15">
+                                <TextBlock Text="Sıkıştırma" 
+                                           FontSize="16" 
+                                           FontWeight="SemiBold" 
+                                           Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                
+                                <CheckBox Content="Yedekleri sıkıştır (ZIP)" 
+                                          IsChecked="{Binding Ayarlar.SikistirmaAktif}"/>
+                                
+                                <TextBlock Text="Sıkıştırma, yedek dosya boyutunu önemli ölçüde azaltır." 
+                                           Foreground="{DynamicResource TextMutedBrush}" 
+                                           FontSize="12"
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Border>
+                        
+                        <!-- Yedek Klasörü -->
+                        <Border Background="{DynamicResource BackgroundMediumBrush}" CornerRadius="8" Padding="20">
+                            <StackPanel Spacing="15">
+                                <TextBlock Text="Yedek Klasörü" 
+                                           FontSize="16" 
+                                           FontWeight="SemiBold" 
+                                           Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                
+                                <TextBox Watermark="Yedek klasör yolu" 
+                                         Text="{Binding Ayarlar.YedekKlasoru}"/>
+                            </StackPanel>
+                        </Border>
+                        
+                        <!-- FTP Yedekleme -->
+                        <Border Background="{DynamicResource BackgroundMediumBrush}" CornerRadius="8" Padding="20">
+                            <StackPanel Spacing="15">
+                                <TextBlock Text="FTP Yedekleme" 
+                                           FontSize="16" 
+                                           FontWeight="SemiBold" 
+                                           Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                
+                                <CheckBox Content="FTP'ye yedekle" 
+                                          IsChecked="{Binding Ayarlar.FtpYedeklemeAktif}"/>
+                                
+                                <Grid ColumnDefinitions="100,*" RowDefinitions="Auto,Auto,Auto,Auto" 
+                                      IsEnabled="{Binding Ayarlar.FtpYedeklemeAktif}">
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sunucu:" 
+                                               VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                    <TextBox Grid.Row="0" Grid.Column="1" 
+                                             Text="{Binding Ayarlar.FtpSunucu}"
+                                             Watermark="ftp.example.com"/>
+                                    
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Kullanıcı:" 
+                                               VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,10,0,0"/>
+                                    <TextBox Grid.Row="1" Grid.Column="1" 
+                                             Text="{Binding Ayarlar.FtpKullanici}"
+                                             Margin="0,10,0,0"/>
+                                    
+                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Şifre:" 
+                                               VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,10,0,0"/>
+                                    <TextBox Grid.Row="2" Grid.Column="1" 
+                                             Text="{Binding Ayarlar.FtpSifre}"
+                                             PasswordChar="●"
+                                             Margin="0,10,0,0"/>
+                                    
+                                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Klasör:" 
+                                               VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,10,0,0"/>
+                                    <TextBox Grid.Row="3" Grid.Column="1" 
+                                             Text="{Binding Ayarlar.FtpKlasor}"
+                                             Watermark="/yedekler"
+                                             Margin="0,10,0,0"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                        
+                        <!-- Email Bildirimi -->
+                        <Border Background="{DynamicResource BackgroundMediumBrush}" CornerRadius="8" Padding="20">
+                            <StackPanel Spacing="15">
+                                <TextBlock Text="Email Bildirimi" 
+                                           FontSize="16" 
+                                           FontWeight="SemiBold" 
+                                           Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                
+                                <CheckBox Content="Yedekleme sonrası email gönder" 
+                                          IsChecked="{Binding Ayarlar.EmailBildirimAktif}"/>
+                                
+                                <TextBox Watermark="Bildirim email adresi" 
+                                         Text="{Binding Ayarlar.BildirimEmail}"
+                                         IsEnabled="{Binding Ayarlar.EmailBildirimAktif}"/>
+                            </StackPanel>
+                        </Border>
+                        
+                        <!-- Kaydet Butonu -->
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <Button Content="💾 Ayarları Kaydet" 
+                                    Command="{Binding SaveSettingsCommand}"
+                                    Classes="primary"/>
+                            <Button Content="🧹 Eski Yedekleri Temizle" 
+                                    Command="{Binding CleanupOldBackupsCommand}"
+                                    Classes="secondary"/>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+    </Grid>
+    
+    <UserControl.Styles>
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="#3B82F6"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="CornerRadius" Value="6"/>
+        </Style>
+        <Style Selector="Button.primary:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#2563EB"/>
+        </Style>
+        
+        <Style Selector="Button.secondary">
+            <Setter Property="Background" Value="#475569"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="CornerRadius" Value="6"/>
+        </Style>
+        <Style Selector="Button.secondary:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#64748B"/>
+        </Style>
+        
+        <Style Selector="Button.warning">
+            <Setter Property="Background" Value="#F59E0B"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="CornerRadius" Value="6"/>
+        </Style>
+        <Style Selector="Button.warning:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#D97706"/>
+        </Style>
+        
+        <Style Selector="Button.danger">
+            <Setter Property="Background" Value="#EF4444"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="CornerRadius" Value="6"/>
+        </Style>
+        <Style Selector="Button.danger:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#DC2626"/>
+        </Style>
+        
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="CornerRadius" Value="4"/>
+        </Style>
+        
+        <Style Selector="ComboBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+        </Style>
+        
+        <Style Selector="CheckBox">
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+        </Style>
+        
+        <Style Selector="NumericUpDown">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+        </Style>
+        
+        <Style Selector="TabItem">
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="15,10"/>
+        </Style>
+        <Style Selector="TabItem:selected">
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+        </Style>
+    </UserControl.Styles>
+</UserControl>

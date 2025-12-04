@@ -1,0 +1,154 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:NeoHal.Desktop.ViewModels"
+             xmlns:entities="using:NeoHal.Core.Entities"
+             x:Class="NeoHal.Desktop.Views.StokDurumuView"
+             x:DataType="vm:StokDurumuViewModel">
+    
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+        
+        <!-- Başlık Bar -->
+        <Border Grid.Row="0" Classes="PageHeader">
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel>
+                    <TextBlock Text="📦 STOK DURUMU" Classes="PageTitle"/>
+                    <TextBlock Text="Ürün bazlı stok takibi ve FIFO detayları" Classes="PageSubtitle"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="15" VerticalAlignment="Center">
+                    <Button Content="🔄 Yenile" Command="{Binding YenileCommand}" 
+                            Classes="PrimaryButton"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+        
+        <!-- Filtre Bar -->
+        <Border Grid.Row="1" Classes="Toolbar">
+            <Grid ColumnDefinitions="Auto,250,30,Auto,Auto,*,Auto">
+                <TextBlock Text="Ürün Filtre:" Classes="FormLabel"/>
+                <ComboBox Grid.Column="1" 
+                          ItemsSource="{Binding Urunler}"
+                          SelectedItem="{Binding FiltreUrun}"
+                          PlaceholderText="Tüm ürünler"
+                          IsTextSearchEnabled="True"
+                          Classes="FormInput">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="entities:Urun">
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <TextBlock Text="{Binding Kod}" Foreground="{DynamicResource TextSecondaryBrush}" Width="60"/>
+                                <TextBlock Text="{Binding Ad}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                
+                <CheckBox Grid.Column="3" IsChecked="{Binding SadeceMevcutGoster}" 
+                          Content="Sadece mevcut stokları göster" Foreground="{DynamicResource TextSecondaryBrush}" Margin="20,0,0,0"/>
+                
+                <Button Grid.Column="4" Content="Temizle" Command="{Binding FiltreTemizleCommand}"
+                        Classes="NavButton" Margin="15,0,0,0"/>
+                
+                <!-- Özet Bilgiler -->
+                <StackPanel Grid.Column="6" Orientation="Horizontal" Spacing="20">
+                    <Border Classes="Card" Padding="15,8" Margin="0">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="Ürün Çeşidi:" Classes="StatLabel"/>
+                            <TextBlock Text="{Binding ToplamUrunCesidi}" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Classes="Card" Padding="15,8" Margin="0">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="Toplam:" Classes="StatLabel"/>
+                            <TextBlock Text="{Binding ToplamStokKg, StringFormat=N2}" FontWeight="Bold" Foreground="{DynamicResource SuccessBrush}"/>
+                            <TextBlock Text="kg" Classes="StatLabel"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Classes="Card" Padding="15,8" Margin="0">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="Kap:" Classes="StatLabel"/>
+                            <TextBlock Text="{Binding ToplamKapAdet}" FontWeight="Bold" Foreground="{DynamicResource WarningBrush}"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </Border>
+        
+        <!-- Ana İçerik: Stok Listesi ve Detay -->
+        <Grid Grid.Row="2" ColumnDefinitions="*,400">
+            
+            <!-- Sol: Stok Özet Listesi -->
+            <Border Classes="ContentArea">
+                <DataGrid ItemsSource="{Binding Stoklar}"
+                          SelectedItem="{Binding SelectedStok}"
+                          AutoGenerateColumns="False"
+                          CanUserResizeColumns="True"
+                          IsReadOnly="True"
+                          SelectionMode="Single">
+                    
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="" Width="40" MinWidth="30" Binding="{Binding DurumIkon}"/>
+                        <DataGridTextColumn Header="Kod" Width="80" MinWidth="60" Binding="{Binding UrunKodu}"/>
+                        <DataGridTextColumn Header="Ürün Adı" Width="180" MinWidth="100" Binding="{Binding UrunAdi}"/>
+                        <DataGridTextColumn Header="Grup" Width="100" MinWidth="70" Binding="{Binding UrunGrubu}"/>
+                        <DataGridTextColumn Header="Kalan Kg" Width="100" MinWidth="80" 
+                                            Binding="{Binding ToplamKalanKg, StringFormat=N2}"
+                                            Foreground="{DynamicResource SuccessBrush}" FontWeight="Bold"/>
+                        <DataGridTextColumn Header="Kalan Kap" Width="90" MinWidth="80" 
+                                            Binding="{Binding ToplamKalanKap}"/>
+                        <DataGridTextColumn Header="Lot" Width="50" MinWidth="40" Binding="{Binding LotSayisi}"/>
+                        <DataGridTextColumn Header="Son Giriş" Width="100" MinWidth="80" 
+                                            Binding="{Binding SonGirisTarihi, StringFormat=dd.MM.yyyy}"/>
+                        <DataGridTextColumn Header="Kaynak" Width="120" MinWidth="80" Binding="{Binding SonGirisKaynagi}"/>
+                        <DataGridTextColumn Header="Ort.Fiyat" Width="90" MinWidth="80" 
+                                            Binding="{Binding OrtalamaFiyat, StringFormat=N2}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+            
+            <!-- Sağ: Seçili Ürün FIFO Detayları -->
+            <Border Grid.Column="1" Background="{DynamicResource BackgroundMediumBrush}" Padding="15" Margin="10,0,0,0" BorderBrush="{DynamicResource BackgroundLightBrush}" BorderThickness="1,0,0,0">
+                <Grid RowDefinitions="Auto,*">
+                    <StackPanel>
+                        <TextBlock Text="📋 LOT DETAYLARI (FIFO)" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,5"/>
+                        <TextBlock Text="{Binding SelectedStok.UrunAdi}" FontSize="14" Foreground="{DynamicResource SuccessBrush}" Margin="0,0,0,10"/>
+                        <TextBlock Text="İlk giren ilk çıkar (FIFO) sırasıyla satış yapılır." 
+                                   Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11" Margin="0,0,0,10"/>
+                    </StackPanel>
+                    
+                    <DataGrid Grid.Row="1"
+                              ItemsSource="{Binding SeciliStokDetaylari}"
+                              AutoGenerateColumns="False"
+                              CanUserResizeColumns="True"
+                              IsReadOnly="True"
+                              SelectionMode="Single"
+                              FontSize="12">
+                        
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="#" Width="30" MinWidth="25" Binding="{Binding FifoSira}"/>
+                            <DataGridTextColumn Header="İrsaliye" Width="90" MinWidth="70" Binding="{Binding IrsaliyeNo}"/>
+                            <DataGridTextColumn Header="Tarih" Width="70" MinWidth="55" 
+                                                Binding="{Binding GirisTarihi, StringFormat=dd.MM}"/>
+                            <DataGridTextColumn Header="Kalan Kg" Width="80" MinWidth="70" 
+                                                Binding="{Binding KalanKg, StringFormat=N1}"
+                                                Foreground="{DynamicResource SuccessBrush}"/>
+                            <DataGridTextColumn Header="Kalan Kap" Width="80" MinWidth="70" Binding="{Binding KalanKap}"/>
+                            <DataGridTextColumn Header="Fiyat" Width="60" MinWidth="50" 
+                                                Binding="{Binding BirimFiyat, StringFormat=N2}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
+        </Grid>
+        
+        <!-- Alt Bar -->
+        <Border Grid.Row="3" Classes="SummaryBar">
+            <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Text="{Binding StatusMessage}" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+                    <TextBlock Text="💡 Sol listeden ürün seçerek FIFO lot detaylarını görüntüleyin" 
+                               Foreground="{DynamicResource TextMutedBrush}" FontSize="11" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

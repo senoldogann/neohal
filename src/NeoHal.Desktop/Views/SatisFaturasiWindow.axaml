@@ -1,0 +1,420 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:NeoHal.Desktop.ViewModels"
+        xmlns:m="using:NeoHal.Core.Entities"
+        xmlns:conv="using:NeoHal.Desktop.Converters"
+        x:Class="NeoHal.Desktop.Views.SatisFaturasiWindow"
+        x:DataType="vm:SatisFaturasiEditViewModel"
+        Title="Satış Faturası"
+        Width="1500" Height="900"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource BackgroundDarkBrush}"
+        Name="FaturaWindow">
+    
+    <Window.Resources>
+        <conv:DecimalToStringConverter x:Key="DecimalConverter"/>
+        <conv:IntToStringConverter x:Key="IntConverter"/>
+    </Window.Resources>
+    
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+        <!-- Başlık Bar -->
+        <Border Grid.Row="0" Background="{DynamicResource BackgroundMediumBrush}" Padding="20,12">
+            <Grid ColumnDefinitions="Auto,Auto,Auto,*,Auto,Auto,Auto">
+                <!-- Alıcı Seçimi (ComboBox) -->
+                <StackPanel Grid.Column="0" Margin="0,0,20,0">
+                    <TextBlock Text="Alıcı (F1)" Foreground="Gray" FontSize="11"/>
+                    <ComboBox Name="AliciAutoComplete"
+                              ItemsSource="{Binding Alicilar}"
+                              Width="350"
+                              PlaceholderText="Alıcı seçin..."
+                              SelectedItem="{Binding SelectedAlici}"
+                              IsTextSearchEnabled="True">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate x:DataType="m:CariHesap">
+                                <StackPanel Orientation="Horizontal" Spacing="10">
+                                    <TextBlock Text="{Binding Kod}" Foreground="#1e88e5" Width="80" FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Unvan}" FontWeight="Bold"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="1" Margin="0,0,20,0">
+                    <TextBlock Text="Fatura No" Foreground="Gray" FontSize="11"/>
+                    <TextBox Text="{Binding FaturaNo}" Width="150" IsReadOnly="True" Background="{DynamicResource BackgroundDarkBrush}"/>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="2" Margin="0,0,20,0">
+                    <TextBlock Text="Tarih" Foreground="Gray" FontSize="11"/>
+                    <DatePicker SelectedDate="{Binding Tarih}" Width="200" MinWidth="200"/>
+                </StackPanel>
+                
+                <Panel Grid.Column="3"/>
+                
+                <!-- Ara Toplam -->
+                <Border Grid.Column="4" Background="#333" CornerRadius="8" Padding="15,10" Margin="0,0,10,0">
+                    <StackPanel>
+                        <TextBlock Text="ARA TOPLAM" Foreground="Gray" FontSize="10"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="₺" FontSize="18" Foreground="White"/>
+                            <TextBlock Text="{Binding AraToplam, StringFormat=N2}" FontSize="18" FontWeight="Bold" Foreground="White"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+                
+                <!-- KDV -->
+                <Border Grid.Column="5" Background="#333" CornerRadius="8" Padding="15,10" Margin="0,0,10,0">
+                    <StackPanel>
+                        <TextBlock Text="KDV (%1)" Foreground="Gray" FontSize="10"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="₺" FontSize="14" Foreground="Gray"/>
+                            <TextBlock Text="{Binding ToplamKdv, StringFormat=N2}" FontSize="14" Foreground="Gray"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+                
+                <!-- Genel Toplam -->
+                <Border Grid.Column="6" Background="{DynamicResource InfoBrush}" CornerRadius="8" Padding="20,10">
+                    <StackPanel>
+                        <TextBlock Text="GENEL TOPLAM" Foreground="#90caf9" FontSize="10"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="₺" FontSize="24" FontWeight="Bold" Foreground="White"/>
+                            <TextBlock Text="{Binding GenelToplam, StringFormat=N2}" 
+                                       FontSize="24" FontWeight="Bold" Foreground="White"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+        
+        <!-- Kısayol Bilgisi -->
+        <Border Grid.Row="1" Background="{DynamicResource BackgroundDarkBrush}" Padding="10,5">
+            <StackPanel Orientation="Horizontal" Spacing="15">
+                <Border Background="#333" CornerRadius="3" Padding="6,2">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <TextBlock Text="TAB" Foreground="#4CAF50" FontSize="10" FontWeight="Bold"/>
+                        <TextBlock Text="Sonraki Sütun" Foreground="Gray" FontSize="10"/>
+                    </StackPanel>
+                </Border>
+                <Border Background="#333" CornerRadius="3" Padding="6,2">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <TextBlock Text="F1" Foreground="#2196F3" FontSize="10" FontWeight="Bold"/>
+                        <TextBlock Text="Alıcı" Foreground="Gray" FontSize="10"/>
+                    </StackPanel>
+                </Border>
+                <Border Background="#333" CornerRadius="3" Padding="6,2">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <TextBlock Text="F2" Foreground="#9C27B0" FontSize="10" FontWeight="Bold"/>
+                        <TextBlock Text="Ürün" Foreground="Gray" FontSize="10"/>
+                    </StackPanel>
+                </Border>
+                <Border Background="#333" CornerRadius="3" Padding="6,2">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <TextBlock Text="F3" Foreground="#9C27B0" FontSize="10" FontWeight="Bold"/>
+                        <TextBlock Text="Kap" Foreground="Gray" FontSize="10"/>
+                    </StackPanel>
+                </Border>
+                <Border Background="#333" CornerRadius="3" Padding="6,2">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <TextBlock Text="F4" Foreground="#FF5722" FontSize="10" FontWeight="Bold"/>
+                        <TextBlock Text="İrsaliye Ekle" Foreground="Gray" FontSize="10"/>
+                    </StackPanel>
+                </Border>
+                <Border Background="#333" CornerRadius="3" Padding="6,2">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <TextBlock Text="F5" Foreground="#FF9800" FontSize="10" FontWeight="Bold"/>
+                        <TextBlock Text="Yeni Satır" Foreground="Gray" FontSize="10"/>
+                    </StackPanel>
+                </Border>
+                <Border Background="#333" CornerRadius="3" Padding="6,2">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <TextBlock Text="F9" Foreground="#FF9800" FontSize="10" FontWeight="Bold"/>
+                        <TextBlock Text="Kaydet" Foreground="Gray" FontSize="10"/>
+                    </StackPanel>
+                </Border>
+                <Border Background="#333" CornerRadius="3" Padding="6,2">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <TextBlock Text="F10" Foreground="#F44336" FontSize="10" FontWeight="Bold"/>
+                        <TextBlock Text="Fatura Kes" Foreground="Gray" FontSize="10"/>
+                    </StackPanel>
+                </Border>
+                <Border Background="#333" CornerRadius="3" Padding="6,2">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <TextBlock Text="ESC" Foreground="#F44336" FontSize="10" FontWeight="Bold"/>
+                        <TextBlock Text="İptal" Foreground="Gray" FontSize="10"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+        
+        <!-- Ana İçerik -->
+        <Grid Grid.Row="2" RowDefinitions="Auto,*" Margin="10">
+            <!-- İrsaliye Seçme Alanı -->
+            <Border Grid.Row="0" Background="{DynamicResource BackgroundMediumBrush}" CornerRadius="6" Padding="15" Margin="0,0,0,10">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                    <TextBlock Grid.Column="0" Text="İRSALİYEDEN EKLE (F4):" FontWeight="Bold" Foreground="#888" 
+                               VerticalAlignment="Center" Margin="0,0,15,0"/>
+                    <ComboBox Grid.Column="1"
+                              Name="IrsaliyeAutoComplete"
+                              ItemsSource="{Binding BekleyenIrsaliyeler}"
+                              PlaceholderText="İrsaliye seçin..."
+                              SelectedItem="{Binding SelectedIrsaliye}"
+                              IsTextSearchEnabled="True">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate x:DataType="m:GirisIrsaliyesi">
+                                <StackPanel Orientation="Horizontal" Spacing="10">
+                                    <TextBlock Text="{Binding IrsaliyeNo}" Foreground="#4CAF50" FontWeight="Bold" Width="100"/>
+                                    <TextBlock Text="{Binding Tarih, StringFormat=dd.MM.yyyy}" Foreground="Gray" Width="80"/>
+                                    <TextBlock Text="{Binding Mustahsil.Unvan}" FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding ToplamNet, StringFormat={}{0:N2} kg}" Foreground="#888"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <Button Grid.Column="2" Content="➕ İrsaliyeyi Ekle" 
+                            Command="{Binding AddIrsaliyeCommand}"
+                            Background="#4CAF50" Foreground="White" 
+                            Padding="15,8" Margin="10,0,0,0"/>
+                </Grid>
+            </Border>
+            
+            <!-- Excel Tarzı Kalem Girişi -->
+            <Border Grid.Row="1" Background="{DynamicResource BackgroundMediumBrush}" CornerRadius="6">
+                <Grid RowDefinitions="Auto,*">
+                    <!-- Sütun Başlıkları -->
+                    <Border Grid.Row="0" Background="{DynamicResource BackgroundDarkBrush}" Padding="5">
+                        <Grid ColumnDefinitions="180,120,80,100,100,120,90,90,90,45">
+                            <TextBlock Grid.Column="0" Text="ÜRÜN (F2)" FontWeight="Bold" Foreground="#1e88e5" Padding="8,5"/>
+                            <TextBlock Grid.Column="1" Text="KAP (F3)" FontWeight="Bold" Foreground="#1e88e5" Padding="8,5"/>
+                            <TextBlock Grid.Column="2" Text="ADET" FontWeight="Bold" Foreground="White" Padding="8,5" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="3" Text="NET (kg)" FontWeight="Bold" Foreground="#4CAF50" Padding="8,5" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="4" Text="FİYAT (₺)" FontWeight="Bold" Foreground="White" Padding="8,5" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="5" Text="TUTAR (₺)" FontWeight="Bold" Foreground="#FFC107" Padding="8,5" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="6" Text="RÜSUM" FontWeight="Bold" Foreground="Gray" Padding="8,5" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="7" Text="KOMİSYON" FontWeight="Bold" Foreground="Gray" Padding="8,5" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="8" Text="STOPAJ" FontWeight="Bold" Foreground="Gray" Padding="8,5" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="9" Text="" Padding="5"/>
+                        </Grid>
+                    </Border>
+                    
+                    <!-- Kalem Satırları -->
+                    <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding Kalemler}" Name="KalemlerList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type m:SatisFaturasiKalem}">
+                                    <Border Background="{DynamicResource BackgroundMediumBrush}" BorderBrush="#444" BorderThickness="0,0,0,1" Padding="5,2">
+                                        <Grid ColumnDefinitions="180,120,80,100,100,120,90,90,90,45">
+                                            
+                                            <!-- ÜRÜN - AutoCompleteBox -->
+                                            <AutoCompleteBox Grid.Column="0"
+                                                             ItemsSource="{Binding #FaturaWindow.((vm:SatisFaturasiEditViewModel)DataContext).Urunler}"
+                                                             FilterMode="ContainsOrdinal"
+                                                             MinimumPrefixLength="0"
+                                                             Watermark="PAT, BIB..."
+                                                             SelectedItem="{Binding Urun}"
+                                                             ValueMemberBinding="{Binding Ad}"
+                                                             Margin="2">
+                                                <AutoCompleteBox.ItemTemplate>
+                                                    <DataTemplate x:DataType="m:Urun">
+                                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                                            <TextBlock Text="{Binding Kod}" Foreground="#4CAF50" Width="50" FontWeight="Bold"/>
+                                                            <TextBlock Text="{Binding Ad}"/>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </AutoCompleteBox.ItemTemplate>
+                                            </AutoCompleteBox>
+                                            
+                                            <!-- KAP TİPİ - AutoCompleteBox -->
+                                            <AutoCompleteBox Grid.Column="1"
+                                                             ItemsSource="{Binding #FaturaWindow.((vm:SatisFaturasiEditViewModel)DataContext).KapTipleri}"
+                                                             FilterMode="ContainsOrdinal"
+                                                             MinimumPrefixLength="0"
+                                                             Watermark="KÜÇ, PLA..."
+                                                             SelectedItem="{Binding KapTipi}"
+                                                             ValueMemberBinding="{Binding Ad}"
+                                                             Margin="2">
+                                                <AutoCompleteBox.ItemTemplate>
+                                                    <DataTemplate x:DataType="m:KapTipi">
+                                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                                            <TextBlock Text="{Binding Kod}" Foreground="#FF9800" Width="40"/>
+                                                            <TextBlock Text="{Binding Ad}"/>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </AutoCompleteBox.ItemTemplate>
+                                            </AutoCompleteBox>
+                                            
+                                            <!-- KAP ADET -->
+                                            <NumericUpDown Grid.Column="2" 
+                                                     Value="{Binding KapAdet}" 
+                                                     Minimum="0"
+                                                     Maximum="9999"
+                                                     FormatString="0"
+                                                     ShowButtonSpinner="False"
+                                                     HorizontalContentAlignment="Center"
+                                                     Margin="2"/>
+                                            
+                                            <!-- NET KG -->
+                                            <NumericUpDown Grid.Column="3" 
+                                                     Name="NetKgInput"
+                                                     Value="{Binding NetKg}" 
+                                                     Minimum="0"
+                                                     Maximum="999999"
+                                                     FormatString="N2"
+                                                     Increment="0.5"
+                                                     ShowButtonSpinner="False"
+                                                     Foreground="#4CAF50"
+                                                     HorizontalContentAlignment="Right"
+                                                     LostFocus="OnFiyatLostFocus"
+                                                     Margin="2"/>
+                                            
+                                            <!-- BİRİM FİYAT -->
+                                            <NumericUpDown Grid.Column="4" 
+                                                     Name="BirimFiyatInput"
+                                                     Value="{Binding BirimFiyat}" 
+                                                     Minimum="0"
+                                                     Maximum="999999"
+                                                     FormatString="N2"
+                                                     Increment="0.1"
+                                                     ShowButtonSpinner="False"
+                                                     HorizontalContentAlignment="Right"
+                                                     LostFocus="OnFiyatLostFocus"
+                                                     Margin="2"/>
+                                            
+                                            <!-- TUTAR (Readonly) -->
+                                            <TextBox Grid.Column="5" 
+                                                     Text="{Binding Tutar, StringFormat=N2}" 
+                                                     IsReadOnly="True"
+                                                     Background="{DynamicResource BackgroundDarkBrush}"
+                                                     Foreground="#FFC107"
+                                                     FontWeight="Bold"
+                                                     HorizontalContentAlignment="Right"
+                                                     Margin="2"/>
+                                            
+                                            <!-- RÜSUM TUTAR (Readonly) -->
+                                            <TextBox Grid.Column="6" 
+                                                     Text="{Binding RusumTutari, StringFormat=N2}" 
+                                                     IsReadOnly="True"
+                                                     Background="{DynamicResource BackgroundDarkBrush}"
+                                                     Foreground="Gray"
+                                                     HorizontalContentAlignment="Right"
+                                                     Margin="2"/>
+                                            
+                                            <!-- KOMİSYON TUTAR (Readonly) -->
+                                            <TextBox Grid.Column="7" 
+                                                     Text="{Binding KomisyonTutari, StringFormat=N2}" 
+                                                     IsReadOnly="True"
+                                                     Background="{DynamicResource BackgroundDarkBrush}"
+                                                     Foreground="Gray"
+                                                     HorizontalContentAlignment="Right"
+                                                     Margin="2"/>
+                                            
+                                            <!-- STOPAJ TUTAR (Readonly) -->
+                                            <TextBox Grid.Column="8" 
+                                                     Text="{Binding StopajTutari, StringFormat=N2}" 
+                                                     IsReadOnly="True"
+                                                     Background="{DynamicResource BackgroundDarkBrush}"
+                                                     Foreground="Gray"
+                                                     HorizontalContentAlignment="Right"
+                                                     Margin="2"/>
+                                            
+                                            <!-- SİL -->
+                                            <Button Grid.Column="9" 
+                                                    Content="✕" 
+                                                    Foreground="#F44336"
+                                                    Background="Transparent"
+                                                    Command="{Binding #FaturaWindow.((vm:SatisFaturasiEditViewModel)DataContext).RemoveKalemCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    HorizontalAlignment="Center"
+                                                    Margin="2"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Grid>
+        
+        <!-- Alt Bar: Toplamlar ve Aksiyonlar -->
+        <Border Grid.Row="3" Background="{DynamicResource BackgroundMediumBrush}" Padding="15">
+            <Grid ColumnDefinitions="*,Auto">
+                <!-- Toplamlar -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="25">
+                    <Border Background="#333" CornerRadius="5" Padding="15,10">
+                        <StackPanel>
+                            <TextBlock Text="TOPLAM KAP" Foreground="Gray" FontSize="10"/>
+                            <TextBlock Text="{Binding ToplamKap}" FontSize="20" FontWeight="Bold" Foreground="White"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Background="#333" CornerRadius="5" Padding="15,10">
+                        <StackPanel>
+                            <TextBlock Text="TOPLAM KG" Foreground="Gray" FontSize="10"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding ToplamKg, StringFormat=N2}" FontSize="20" FontWeight="Bold" Foreground="#4CAF50"/>
+                                <TextBlock Text=" kg" FontSize="11" Foreground="Gray" VerticalAlignment="Bottom" Margin="0,0,0,3"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    <Border Background="#333" CornerRadius="5" Padding="15,10">
+                        <StackPanel>
+                            <TextBlock Text="RÜSUM (%1)" Foreground="Gray" FontSize="10"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="₺" FontSize="14" Foreground="Gray" VerticalAlignment="Bottom" Margin="0,0,2,2"/>
+                                <TextBlock Text="{Binding ToplamRusum, StringFormat=N2}" FontSize="16" Foreground="Gray"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    <Border Background="#333" CornerRadius="5" Padding="15,10">
+                        <StackPanel>
+                            <TextBlock Text="KOMİSYON (%8)" Foreground="Gray" FontSize="10"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="₺" FontSize="14" Foreground="Gray" VerticalAlignment="Bottom" Margin="0,0,2,2"/>
+                                <TextBlock Text="{Binding ToplamKomisyon, StringFormat=N2}" FontSize="16" Foreground="Gray"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    <Border Background="#333" CornerRadius="5" Padding="15,10">
+                        <StackPanel>
+                            <TextBlock Text="STOPAJ (%4)" Foreground="Gray" FontSize="10"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="₺" FontSize="14" Foreground="Gray" VerticalAlignment="Bottom" Margin="0,0,2,2"/>
+                                <TextBlock Text="{Binding ToplamStopaj, StringFormat=N2}" FontSize="16" Foreground="Gray"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+                
+                <!-- Aksiyonlar -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+                    <Button Content="➕ Yeni Satır" 
+                            Command="{Binding AddKalemCommand}"
+                            Background="#333"
+                            Padding="15,10"/>
+                    <Button Content="İptal (ESC)" 
+                            Command="{Binding CancelCommand}"
+                            Background="{DynamicResource BackgroundMediumBrush}"
+                            Padding="15,10"/>
+                    <Button Content="🖨️ Yazdır (⌘P)" 
+                            Command="{Binding PrintCommand}"
+                            Background="#00BCD4"
+                            Foreground="White"
+                            Padding="15,10"/>
+                    <Button Content="💾 Kaydet (⌘S)" 
+                            Command="{Binding SaveCommand}"
+                            Background="#4CAF50"
+                            Foreground="White"
+                            FontWeight="Bold"
+                            Padding="20,10"/>
+                    <Button Content="✂️ FATURA KES (F10)" 
+                            Command="{Binding FaturaKesCommand}"
+                            Background="#F44336"
+                            Foreground="White"
+                            FontWeight="Bold"
+                            Padding="25,10"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

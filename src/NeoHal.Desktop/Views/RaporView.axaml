@@ -1,0 +1,348 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:NeoHal.Desktop.ViewModels"
+             xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
+             x:Class="NeoHal.Desktop.Views.RaporView"
+             x:DataType="vm:RaporViewModel">
+    
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- Üst Panel: Filtreler ve Kontroller -->
+        <Border Grid.Row="0" 
+                Background="{DynamicResource BackgroundMediumBrush}" 
+                Padding="20" 
+                CornerRadius="0,0,8,8">
+            <Grid RowDefinitions="Auto,Auto">
+                <!-- Başlık -->
+                <StackPanel Orientation="Horizontal" Spacing="15" Margin="0,0,0,15">
+                    <TextBlock Text="📊" FontSize="28"/>
+                    <TextBlock Text="Raporlama Merkezi" 
+                               FontSize="24" 
+                               FontWeight="Bold" 
+                               Foreground="{DynamicResource TextPrimaryBrush}"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+                
+                <!-- Filtreler -->
+                <Grid Grid.Row="1" ColumnDefinitions="Auto,Auto,Auto,Auto,*,Auto">
+                    <!-- Rapor Tipi -->
+                    <StackPanel Grid.Column="0" Margin="0,0,20,0">
+                        <TextBlock Text="Rapor Tipi" 
+                                   Foreground="{DynamicResource TextSecondaryBrush}" 
+                                   FontSize="12" 
+                                   Margin="0,0,0,5"/>
+                        <ComboBox ItemsSource="{Binding RaporTipleri}" 
+                                  SelectedItem="{Binding SelectedRaporTipi}"
+                                  Width="180"/>
+                    </StackPanel>
+                    
+                    <!-- Başlangıç Tarihi -->
+                    <StackPanel Grid.Column="1" Margin="0,0,20,0">
+                        <TextBlock Text="Başlangıç" 
+                                   Foreground="{DynamicResource TextSecondaryBrush}" 
+                                   FontSize="12" 
+                                   Margin="0,0,0,5"/>
+                        <DatePicker SelectedDate="{Binding BaslangicTarihi}"/>
+                    </StackPanel>
+                    
+                    <!-- Bitiş Tarihi -->
+                    <StackPanel Grid.Column="2" Margin="0,0,20,0">
+                        <TextBlock Text="Bitiş" 
+                                   Foreground="{DynamicResource TextSecondaryBrush}" 
+                                   FontSize="12" 
+                                   Margin="0,0,0,5"/>
+                        <DatePicker SelectedDate="{Binding BitisTarihi}"/>
+                    </StackPanel>
+                    
+                    <!-- Hızlı Tarih Butonları -->
+                    <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="5" VerticalAlignment="Bottom">
+                        <Button Content="Bugün" 
+                                Command="{Binding BugunkuTarihAyarlaCommand}"
+                                Classes="quickdate"/>
+                        <Button Content="Hafta" 
+                                Command="{Binding BuHaftaAyarlaCommand}"
+                                Classes="quickdate"/>
+                        <Button Content="Ay" 
+                                Command="{Binding BuAyAyarlaCommand}"
+                                Classes="quickdate"/>
+                        <Button Content="Yıl" 
+                                Command="{Binding BuYilAyarlaCommand}"
+                                Classes="quickdate"/>
+                    </StackPanel>
+                    
+                    <!-- Boşluk -->
+                    <Panel Grid.Column="4"/>
+                    
+                    <!-- Ana Butonlar -->
+                    <StackPanel Grid.Column="5" Orientation="Horizontal" Spacing="10" VerticalAlignment="Bottom">
+                        <Button Content="🔄 Rapor Oluştur" 
+                                Command="{Binding RaporOlusturCommand}"
+                                Background="#3B82F6"
+                                Foreground="White"
+                                Padding="15,10"
+                                FontWeight="SemiBold"/>
+                        <Button Content="🗑️ Temizle" 
+                                Command="{Binding TemizleCommand}"
+                                Background="#64748B"
+                                Foreground="White"
+                                Padding="15,10"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Border>
+        
+        <!-- Ana İçerik -->
+        <Grid Grid.Row="1" Margin="20" ColumnDefinitions="*,300">
+            <!-- Sol: Rapor Tablosu -->
+            <Border Background="{DynamicResource BackgroundMediumBrush}" 
+                    CornerRadius="8" 
+                    Padding="15"
+                    Margin="0,0,15,0">
+                <Grid RowDefinitions="Auto,*">
+                    <!-- Rapor Başlığı -->
+                    <Grid Margin="0,0,0,15">
+                        <TextBlock Text="{Binding RaporAdi, FallbackValue='Rapor Seçiniz'}" 
+                                   FontSize="18" 
+                                   FontWeight="SemiBold" 
+                                   Foreground="{DynamicResource TextPrimaryBrush}"/>
+                        <TextBlock Text="{Binding AktifRapor.Ozet.ToplamKayit, StringFormat='{}{0} Kayıt', FallbackValue=''}" 
+                                   FontSize="14" 
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                   HorizontalAlignment="Right"/>
+                    </Grid>
+                    
+                    <!-- Veri Tablosu -->
+                    <DataGrid Grid.Row="1" 
+                              ItemsSource="{Binding RaporSatirDisplaylar}"
+                              AutoGenerateColumns="False"
+                              CanUserResizeColumns="True"
+                              CanUserSortColumns="True"
+                              GridLinesVisibility="Horizontal"
+                              Background="Transparent"
+                              BorderThickness="0"
+                              IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Fatura No" Binding="{Binding FaturaNo}" Width="120"/>
+                            <DataGridTextColumn Header="Tarih" Binding="{Binding Tarih}" Width="100"/>
+                            <DataGridTextColumn Header="Müşteri" Binding="{Binding Musteri}" Width="*"/>
+                            <DataGridTextColumn Header="Ürün" Binding="{Binding Urun}" Width="150"/>
+                            <DataGridTextColumn Header="Miktar" Binding="{Binding Miktar}" Width="100"/>
+                            <DataGridTextColumn Header="Birim Fiyat" Binding="{Binding BirimFiyat}" Width="110"/>
+                            <DataGridTextColumn Header="Tutar" Binding="{Binding Tutar}" Width="120"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    
+                    <!-- Yükleniyor Göstergesi -->
+                    <Border Grid.Row="1" 
+                            Background="#80FFFFFF"
+                            IsVisible="{Binding IsLoading}">
+                        <StackPanel HorizontalAlignment="Center" 
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="⏳" FontSize="48" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Rapor hazırlanıyor..." 
+                                       Foreground="{DynamicResource TextPrimaryBrush}" 
+                                       FontSize="16"
+                                       Margin="0,10,0,0"/>
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Boş Durum -->
+                    <Border Grid.Row="1" 
+                            Background="Transparent"
+                            IsVisible="{Binding !RaporSatirlari.Count}">
+                        <StackPanel HorizontalAlignment="Center" 
+                                    VerticalAlignment="Center"
+                                    IsVisible="{Binding !IsLoading}">
+                            <TextBlock Text="📋" FontSize="64" HorizontalAlignment="Center" Opacity="0.5"/>
+                            <TextBlock Text="Rapor verisi yok" 
+                                       Foreground="{DynamicResource TextSecondaryBrush}" 
+                                       FontSize="18"
+                                       Margin="0,15,0,5"
+                                       HorizontalAlignment="Center"/>
+                            <TextBlock Text="Filtrelerinizi ayarlayın ve 'Rapor Oluştur' butonuna tıklayın" 
+                                       Foreground="{DynamicResource TextMutedBrush}" 
+                                       FontSize="14"
+                                       HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+            
+            <!-- Sağ: Özet ve Dışa Aktarma -->
+            <Grid Grid.Column="1" RowDefinitions="Auto,*,Auto">
+                <!-- Özet Kartları -->
+                <StackPanel Grid.Row="0" Spacing="10">
+                    <Border Background="{DynamicResource BackgroundMediumBrush}" CornerRadius="8" Padding="15">
+                        <StackPanel>
+                            <TextBlock Text="📈 Rapor Özeti" 
+                                       FontSize="16" 
+                                       FontWeight="SemiBold" 
+                                       Foreground="{DynamicResource TextPrimaryBrush}"
+                                       Margin="0,0,0,15"/>
+                            
+                            <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,*">
+                                <!-- Toplam Kayıt -->
+                                <Border Grid.Row="0" Grid.Column="0" 
+                                        Background="White" 
+                                        CornerRadius="6" 
+                                        Padding="10" 
+                                        Margin="0,0,5,10"
+                                        BorderBrush="#E0E0E0" BorderThickness="1">
+                                    <StackPanel>
+                                        <TextBlock Text="Kayıt Sayısı" 
+                                                   Foreground="{DynamicResource TextSecondaryBrush}" 
+                                                   FontSize="11"/>
+                                        <TextBlock Text="{Binding AktifRapor.Ozet.ToplamKayit, FallbackValue='0'}" 
+                                                   Foreground="#3B82F6" 
+                                                   FontSize="22" 
+                                                   FontWeight="Bold"/>
+                                    </StackPanel>
+                                </Border>
+                                
+                                <!-- Toplam Miktar -->
+                                <Border Grid.Row="0" Grid.Column="1" 
+                                        Background="White" 
+                                        CornerRadius="6" 
+                                        Padding="10" 
+                                        Margin="5,0,0,10"
+                                        BorderBrush="#E0E0E0" BorderThickness="1">
+                                    <StackPanel>
+                                        <TextBlock Text="Toplam Miktar" 
+                                                   Foreground="{DynamicResource TextSecondaryBrush}" 
+                                                   FontSize="11"/>
+                                        <TextBlock Text="{Binding AktifRapor.Ozet.ToplamMiktar, StringFormat='{}{0:N2}', FallbackValue='0'}" 
+                                                   Foreground="#10B981" 
+                                                   FontSize="22" 
+                                                   FontWeight="Bold"/>
+                                    </StackPanel>
+                                </Border>
+                                
+                                <!-- Toplam Tutar -->
+                                <Border Grid.Row="1" Grid.ColumnSpan="2" 
+                                        Background="White" 
+                                        CornerRadius="6" 
+                                        Padding="10"
+                                        BorderBrush="#E0E0E0" BorderThickness="1">
+                                    <StackPanel>
+                                        <TextBlock Text="Toplam Tutar" 
+                                                   Foreground="{DynamicResource TextSecondaryBrush}" 
+                                                   FontSize="11"/>
+                                        <TextBlock Text="{Binding AktifRapor.Ozet.ToplamTutar, StringFormat='{}{0:N2} ₺', FallbackValue='0,00 ₺'}" 
+                                                   Foreground="#F59E0B" 
+                                                   FontSize="28" 
+                                                   FontWeight="Bold"/>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+                
+                <!-- Grafik Alanı (Placeholder) -->
+                <Border Grid.Row="1" 
+                        Background="{DynamicResource BackgroundMediumBrush}" 
+                        CornerRadius="8" 
+                        Padding="15"
+                        Margin="0,10,0,10">
+                    <Grid>
+                        <StackPanel VerticalAlignment="Center" 
+                                    HorizontalAlignment="Center"
+                                    IsVisible="{Binding !GrafikVerileri.Count}">
+                            <TextBlock Text="📊" FontSize="48" HorizontalAlignment="Center" Opacity="0.3"/>
+                            <TextBlock Text="Grafik" 
+                                       Foreground="{DynamicResource TextSecondaryBrush}" 
+                                       FontSize="14"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,10,0,0"/>
+                        </StackPanel>
+                        
+                        <!-- Basit Bar Chart -->
+                        <ItemsControl ItemsSource="{Binding GrafikVerileri}"
+                                      IsVisible="{Binding GrafikVerileri.Count}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="80,*,60" Margin="0,3">
+                                        <TextBlock Grid.Column="0" 
+                                                   Text="{Binding Etiket}" 
+                                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                                   FontSize="11"
+                                                   VerticalAlignment="Center"/>
+                                        <Border Grid.Column="1" 
+                                                Background="{Binding Renk}" 
+                                                CornerRadius="3"
+                                                Height="20"
+                                                HorizontalAlignment="Left"
+                                                MinWidth="10"/>
+                                        <TextBlock Grid.Column="2" 
+                                                   Text="{Binding Deger, StringFormat='{}{0:N0}'}" 
+                                                   Foreground="{DynamicResource TextPrimaryBrush}"
+                                                   FontSize="11"
+                                                   HorizontalAlignment="Right"
+                                                   VerticalAlignment="Center"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </Border>
+                
+                <!-- Dışa Aktarma -->
+                <Border Grid.Row="2" 
+                        Background="{DynamicResource BackgroundMediumBrush}" 
+                        CornerRadius="8" 
+                        Padding="15">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="📥 Dışa Aktar" 
+                                   FontSize="16" 
+                                   FontWeight="SemiBold" 
+                                   Foreground="{DynamicResource TextPrimaryBrush}"/>
+                        
+                        <ComboBox ItemsSource="{Binding ExportFormatlari}" 
+                                  SelectedItem="{Binding ExportFormat}"
+                                  HorizontalAlignment="Stretch"/>
+                        
+                        <Button Content="💾 Dışa Aktar" 
+                                Command="{Binding DışaAktarCommand}"
+                                Background="#10B981"
+                                Foreground="White"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Center"
+                                Padding="10"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+        
+        <!-- Alt Durum Çubuğu -->
+        <Border Grid.Row="2" 
+                Background="{DynamicResource BackgroundMediumBrush}" 
+                Padding="15,10">
+            <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           Text="{Binding StatusMessage, FallbackValue='Hazır'}" 
+                           Foreground="{DynamicResource TextSecondaryBrush}"
+                           VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="1"
+                           Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='Son güncelleme: {0:HH:mm:ss}'}" 
+                           Foreground="{DynamicResource TextMutedBrush}"
+                           VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+    </Grid>
+    
+    <UserControl.Styles>
+        <Style Selector="Button.quickdate">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8,5"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+        <Style Selector="Button.quickdate:pointerover">
+            <Setter Property="Background" Value="#F1F5F9"/>
+        </Style>
+    </UserControl.Styles>
+</UserControl>

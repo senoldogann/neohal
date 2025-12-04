@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "gwbZMBm8cSQ=",
+  "success": true,
+  "projectFilePath": "/Users/dogan/Desktop/HAL-PROJEM/NeoHal/src/NeoHal.Core/NeoHal.Core.csproj",
+  "expectedPackageFiles": [
+    "/Users/dogan/.nuget/packages/microsoft.netcore.app.ref/9.0.11/microsoft.netcore.app.ref.9.0.11.nupkg.sha512",
+    "/Users/dogan/.nuget/packages/microsoft.aspnetcore.app.ref/9.0.11/microsoft.aspnetcore.app.ref.9.0.11.nupkg.sha512"
+  ],
+  "logs": []
+}

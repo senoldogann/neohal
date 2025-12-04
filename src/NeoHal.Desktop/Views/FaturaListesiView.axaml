@@ -1,0 +1,125 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:NeoHal.Desktop.ViewModels"
+             x:Class="NeoHal.Desktop.Views.FaturaListesiView"
+             x:DataType="vm:FaturaListesiViewModel">
+    
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+        <!-- Başlık -->
+        <Border Grid.Row="0" Background="{DynamicResource PrimaryBrush}" Padding="20,15">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <TextBlock Text="📄" FontSize="24"/>
+                    <TextBlock Text="FATURA LİSTESİ" FontSize="20" FontWeight="Bold" 
+                               VerticalAlignment="Center" Foreground="White"/>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10">
+                    <TextBlock Text="{Binding ToplamFaturaSayisi, StringFormat='Toplam: {0} fatura'}" 
+                               Foreground="White" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+        
+        <!-- Filtreler -->
+        <Border Grid.Row="1" Background="{DynamicResource BackgroundMediumBrush}" Padding="15">
+            <Grid ColumnDefinitions="Auto,200,30,Auto,200,30,Auto,200,30,Auto,*,Auto">
+                <TextBlock Text="Tarih:" VerticalAlignment="Center" Foreground="#aaa"/>
+                <DatePicker Grid.Column="1" SelectedDate="{Binding BaslangicTarihi}" Background="#333"/>
+                
+                <TextBlock Grid.Column="3" Text="-" VerticalAlignment="Center" Foreground="#aaa"/>
+                <DatePicker Grid.Column="4" SelectedDate="{Binding BitisTarihi}" Background="#333"/>
+                
+                <TextBlock Grid.Column="6" Text="Müşteri:" VerticalAlignment="Center" Foreground="#aaa"/>
+                <ComboBox Grid.Column="7" 
+                          ItemsSource="{Binding Musteriler}"
+                          SelectedItem="{Binding SeciliMusteri}"
+                          PlaceholderText="Tüm müşteriler..."
+                          IsTextSearchEnabled="True"
+                          Background="#333">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Unvan}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                
+                <TextBlock Grid.Column="9" Text="Ara:" VerticalAlignment="Center" Foreground="#aaa"/>
+                <TextBox Grid.Column="10" Text="{Binding AramaMetni}" 
+                         Watermark="Fatura no, açıklama..." Background="#333" Margin="0,0,10,0"/>
+                
+                <Button Grid.Column="11" Content="🔍 Ara" Command="{Binding AraCommand}"
+                        Background="{DynamicResource PrimaryLightBrush}" Foreground="White" Padding="15,8"/>
+            </Grid>
+        </Border>
+        
+        <!-- Fatura Listesi -->
+        <Border Grid.Row="2" Background="{DynamicResource BackgroundMediumBrush}" Padding="10">
+            <Grid RowDefinitions="*,Auto">
+                <DataGrid ItemsSource="{Binding Faturalar}"
+                          SelectedItem="{Binding SeciliFatura}"
+                          AutoGenerateColumns="False"
+                          CanUserResizeColumns="True"
+                          CanUserReorderColumns="False"
+                          GridLinesVisibility="Horizontal"
+                          BorderThickness="1"
+                          BorderBrush="#444"
+                          IsReadOnly="True"
+                          SelectionMode="Single"
+                          Background="{DynamicResource BackgroundMediumBrush}"
+                          RowBackground="{DynamicResource BackgroundMediumBrush}">
+                    
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Fatura No" Width="140" MinWidth="100" Binding="{Binding FaturaNo}"/>
+                        <DataGridTextColumn Header="Tarih" Width="100" MinWidth="80" 
+                                            Binding="{Binding FaturaTarihi, StringFormat='{}{0:dd.MM.yyyy}'}"/>
+                        <DataGridTextColumn Header="Müşteri" Width="250" MinWidth="120" Binding="{Binding Alici.Unvan}"/>
+                        <DataGridTextColumn Header="Tutar (₺)" Width="120" MinWidth="90" 
+                                            Binding="{Binding GenelToplam, StringFormat=N2}"
+                                            Foreground="#4CAF50" FontWeight="Bold"/>
+                        <DataGridTextColumn Header="Durum" Width="100" MinWidth="70" Binding="{Binding Durum}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                
+                <!-- Seçili fatura için işlem butonları -->
+                <Border Grid.Row="1" Background="{DynamicResource BackgroundDarkBrush}" Padding="10" Margin="0,10,0,0"
+                        IsVisible="{Binding SeciliFatura, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                        <Button Content="✏️ Düzenle" Command="{Binding DuzenleSeciliCommand}"
+                                Background="#2196F3" Foreground="White" Padding="15,8"/>
+                        <Button Content="🖨 Yazdır" Command="{Binding YazdirSeciliCommand}"
+                                Background="#4CAF50" Foreground="White" Padding="15,8"/>
+                        <Button Content="📄 PDF Önizle" Command="{Binding PdfSeciliCommand}"
+                                Background="{DynamicResource WarningBrush}" Foreground="White" Padding="15,8"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+        
+        <!-- Alt Özet -->
+        <Border Grid.Row="3" Background="{DynamicResource BackgroundDarkBrush}" Padding="15">
+            <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto">
+                <TextBlock Text="{Binding StatusMessage}" Foreground="#888" VerticalAlignment="Center"/>
+                
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="20" Margin="0,0,30,0">
+                    <StackPanel>
+                        <TextBlock Text="Toplam Kap" Foreground="#888" FontSize="11"/>
+                        <TextBlock Text="{Binding ToplamKapOzet}" FontSize="16" Foreground="White"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock Text="Toplam Kg" Foreground="#888" FontSize="11"/>
+                        <TextBlock Text="{Binding ToplamKgOzet, StringFormat=N2}" FontSize="16" Foreground="White"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock Text="Toplam Tutar" Foreground="#888" FontSize="11"/>
+                        <TextBlock Text="{Binding ToplamTutarOzet, StringFormat=₺{0:N2}}" 
+                                   FontSize="18" FontWeight="Bold" Foreground="#4CAF50"/>
+                    </StackPanel>
+                </StackPanel>
+                
+                <Button Grid.Column="4" Content="↻ Yenile" Command="{Binding YenileCommand}"
+                        Background="#333" Padding="15,8"/>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

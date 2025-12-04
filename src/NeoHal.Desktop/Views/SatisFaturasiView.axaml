@@ -1,0 +1,93 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:NeoHal.Desktop.ViewModels"
+             x:Class="NeoHal.Desktop.Views.SatisFaturasiView"
+             x:DataType="vm:SatisFaturasiListViewModel">
+
+    <UserControl.KeyBindings>
+        <KeyBinding Gesture="F3" Command="{Binding NewFaturaCommand}" />
+        <KeyBinding Gesture="F5" Command="{Binding RefreshCommand}" />
+    </UserControl.KeyBindings>
+    
+    <Grid RowDefinitions="Auto, *, Auto">
+        <!-- Başlık ve Filtre -->
+        <Border Grid.Row="0" Classes="PageHeader">
+            <Grid RowDefinitions="Auto, Auto">
+                <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="15">
+                        <TextBlock Text="🧾 Satış Faturaları" Classes="PageTitle"/>
+                        <Button Content="➕ Yeni Fatura" 
+                                Command="{Binding NewFaturaCommand}" 
+                                Classes="SuccessButton"/>
+                    </StackPanel>
+                    <Button Grid.Column="1" Content="🔄 Yenile" 
+                            Command="{Binding RefreshCommand}"
+                            Classes="NavButton"/>
+                </Grid>
+                
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="15" Margin="0,15,0,0">
+                    <TextBlock Text="Tarih Aralığı:" Classes="FormLabel"/>
+                    <DatePicker SelectedDate="{Binding FiltreBaslangic}" Width="200"/>
+                    <TextBlock Text="-" VerticalAlignment="Center" Margin="10,0" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                    <DatePicker SelectedDate="{Binding FiltreBitis}" Width="200"/>
+                    <Button Content="🔍 Filtrele" Command="{Binding FilterCommand}" 
+                            Classes="PrimaryButton"/>
+                    <TextBlock Text="{Binding StatusMessage}" 
+                               Classes="StatLabel" Margin="20,0,0,0"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- DataGrid -->
+        <Border Grid.Row="1" Classes="ContentArea">
+            <DataGrid ItemsSource="{Binding Faturalar}" 
+                      SelectedItem="{Binding SelectedFatura}"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True"
+                      CanUserResizeColumns="True"
+                      CanUserSortColumns="True"
+                      SelectionMode="Single">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Fatura No" Binding="{Binding FaturaNo}" Width="130"/>
+                    <DataGridTextColumn Header="Tarih" Binding="{Binding FaturaTarihi, StringFormat=dd.MM.yyyy}" Width="100"/>
+                    <DataGridTextColumn Header="Alıcı" Binding="{Binding Alici.Unvan}" Width="*"/>
+                    <DataGridTextColumn Header="Tip" Binding="{Binding FaturaTipi}" Width="80"/>
+                    <DataGridTextColumn Header="Ara Toplam" Binding="{Binding AraToplam, StringFormat=₺{0:N2}}" Width="110"/>
+                    <DataGridTextColumn Header="KDV" Binding="{Binding KdvTutari, StringFormat=₺{0:N2}}" Width="90"/>
+                    <DataGridTextColumn Header="Genel Toplam" Binding="{Binding GenelToplam, StringFormat=₺{0:N2}}" Width="120" Foreground="{DynamicResource SuccessBrush}" FontWeight="Bold"/>
+                    <DataGridTextColumn Header="Durum" Binding="{Binding Durum}" Width="90"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+
+        <!-- Alt Bar -->
+        <Border Grid.Row="2" Classes="SummaryBar">
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="15">
+                    <TextBlock Text="{Binding Faturalar.Count, StringFormat='Toplam: {0} fatura'}" 
+                               Classes="StatLabel"/>
+                    
+                    <Border Width="1" Background="{DynamicResource BackgroundLightBrush}" Margin="10,0"
+                            IsVisible="{Binding SelectedFatura, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                    
+                    <TextBlock Text="Seçili Fatura:" Classes="StatLabel"
+                               IsVisible="{Binding SelectedFatura, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                    <TextBlock Text="{Binding SelectedFatura.FaturaNo}" 
+                               Classes="StatValue" FontSize="14"
+                               IsVisible="{Binding SelectedFatura, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                    <TextBlock Text="{Binding SelectedFatura.GenelToplam, StringFormat='(₺{0:N2})'}" 
+                               Foreground="{DynamicResource SuccessBrush}" VerticalAlignment="Center" FontWeight="Bold"
+                               IsVisible="{Binding SelectedFatura, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10"
+                            IsVisible="{Binding SelectedFatura, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <Button Content="📝 Düzenle" Command="{Binding EditFaturaCommand}" Classes="WarningButton"/>
+                    <Button Content="🖨️ Yazdır" Classes="NavButton"/>
+                    <Button Content="🗑 Sil" Command="{Binding DeleteCommand}" 
+                            Classes="DangerButton"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

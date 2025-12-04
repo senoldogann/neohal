@@ -1,0 +1,99 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:NeoHal.Desktop.ViewModels"
+             x:Class="NeoHal.Desktop.Views.GirisIrsaliyesiView"
+             x:DataType="vm:GirisIrsaliyesiListViewModel">
+    
+    <Grid RowDefinitions="Auto, *, Auto">
+        <!-- Başlık ve Filtre -->
+        <Border Grid.Row="0" Background="{DynamicResource BackgroundMediumBrush}" Padding="20,15">
+            <Grid RowDefinitions="Auto, Auto">
+                <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="15">
+                        <TextBlock Text="{Binding PageTitle}" FontSize="22" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <TextBlock Text="(Hal Kayıt ekranından oluşturulur)" FontSize="12" Foreground="#888" VerticalAlignment="Center" Margin="10,0,0,0"
+                                   IsVisible="{Binding !SadeceTaslaklar}"/>
+                        <TextBlock Text="(Onay bekleyen kayıtlar)" FontSize="12" Foreground="#FF9800" VerticalAlignment="Center" Margin="10,0,0,0"
+                                   IsVisible="{Binding SadeceTaslaklar}"/>
+                    </StackPanel>
+                    <Button Grid.Column="1" Content="🔄 Yenile" 
+                            Command="{Binding RefreshCommand}"
+                            Padding="15,10"/>
+                </Grid>
+                
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="15" Margin="0,15,0,0">
+                    <TextBlock Text="Tarih Aralığı:" VerticalAlignment="Center" Foreground="#aaa"/>
+                    <DatePicker SelectedDate="{Binding FiltreBaslangic}" Width="200"/>
+                    <TextBlock Text="-" VerticalAlignment="Center" Margin="10,0"/>
+                    <DatePicker SelectedDate="{Binding FiltreBitis}" Width="200"/>
+                    <Button Content="🔍 Filtrele" Command="{Binding FilterCommand}" 
+                            Background="#2196F3" Foreground="White" Padding="15,8"/>
+                    <TextBlock Text="{Binding StatusMessage}" 
+                               Foreground="#888" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- DataGrid -->
+        <DataGrid Grid.Row="1" 
+                  ItemsSource="{Binding Irsaliyeler}" 
+                  SelectedItem="{Binding SelectedIrsaliye}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  GridLinesVisibility="Horizontal"
+                  BorderThickness="0"
+                  CanUserResizeColumns="True"
+                  CanUserSortColumns="True"
+                  SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="İrsaliye No" Binding="{Binding IrsaliyeNo}" Width="150" MinWidth="120"/>
+                <DataGridTextColumn Header="Tarih" Binding="{Binding Tarih, StringFormat=dd.MM.yyyy}" Width="110" MinWidth="90"/>
+                <DataGridTextColumn Header="Durum" Binding="{Binding Durum}" Width="100" MinWidth="80"/>
+                <DataGridTextColumn Header="Brüt (kg)" Binding="{Binding ToplamBrut, StringFormat=N2}" Width="110" MinWidth="90"/>
+                <DataGridTextColumn Header="Dara (kg)" Binding="{Binding ToplamDara, StringFormat=N2}" Width="110" MinWidth="90"/>
+                <DataGridTextColumn Header="Net (kg)" Binding="{Binding ToplamNet, StringFormat=N2}" Width="110" MinWidth="90"/>
+                <DataGridTextColumn Header="Kap" Binding="{Binding ToplamKapAdet}" Width="80" MinWidth="60"/>
+                <DataGridTextColumn Header="Kayıt" Binding="{Binding OlusturmaTarihi, StringFormat=dd.MM.yy HH:mm}" Width="140" MinWidth="110"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Alt Bar: Seçili İrsaliye İşlemleri -->
+        <Border Grid.Row="2" Background="{DynamicResource BackgroundMediumBrush}" Padding="15,10">
+            <Grid ColumnDefinitions="*,Auto,Auto">
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="15">
+                    <TextBlock Text="{Binding Irsaliyeler.Count, StringFormat='Toplam: {0} irsaliye'}" 
+                               FontSize="13" Foreground="#888" VerticalAlignment="Center"/>
+                    
+                    <Border Width="1" Background="#444" Margin="10,0"
+                            IsVisible="{Binding SelectedIrsaliye, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                    
+                    <TextBlock Text="Seçili İrsaliye:" Foreground="#aaa" VerticalAlignment="Center"
+                               IsVisible="{Binding SelectedIrsaliye, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                    <TextBlock Text="{Binding SelectedIrsaliye.IrsaliyeNo}" 
+                               FontWeight="SemiBold" VerticalAlignment="Center"
+                               IsVisible="{Binding SelectedIrsaliye, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                    <TextBlock Text="{Binding SelectedIrsaliye.ToplamNet, StringFormat='({0:N2} kg)'}" 
+                               Foreground="#4CAF50" VerticalAlignment="Center"
+                               IsVisible="{Binding SelectedIrsaliye, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                </StackPanel>
+                
+                <!-- Kısayol Bilgisi -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" Margin="0,0,20,0">
+                    <TextBlock Text="F5:Yenile" Foreground="#666" FontSize="11" VerticalAlignment="Center"/>
+                    <TextBlock Text="F6:Onayla" Foreground="#4CAF50" FontSize="11" VerticalAlignment="Center"/>
+                    <TextBlock Text="Enter:Düzenle" Foreground="#666" FontSize="11" VerticalAlignment="Center"/>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10"
+                            IsVisible="{Binding SelectedIrsaliye, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <Button Content="✅ Onayla" Command="{Binding OnaylaCommand}" 
+                            Background="#4CAF50" Foreground="White" Padding="15,8"
+                            ToolTip.Tip="İrsaliyeyi onayla - Satışa hazır hale getir"/>
+                    <Button Content="📝 Düzenle" Command="{Binding EditIrsaliyeCommand}" Padding="15,8"/>
+                    <Button Content="🗑 Sil" Command="{Binding DeleteCommand}" 
+                            Background="#F44336" Foreground="White" Padding="15,8"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

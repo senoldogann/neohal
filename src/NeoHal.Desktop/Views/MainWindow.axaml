@@ -1,0 +1,397 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:NeoHal.Desktop.ViewModels"
+        xmlns:views="using:NeoHal.Desktop.Views"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="800"
+        x:Class="NeoHal.Desktop.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="{Binding Title}"
+        Icon="/Assets/logo.ico"
+        Width="1400" Height="800"
+        MinWidth="1200" MinHeight="600"
+        WindowStartupLocation="CenterScreen">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <DockPanel>
+        <!-- Top Menu Bar (System Menu) -->
+        <Menu DockPanel.Dock="Top" Background="{DynamicResource BackgroundMediumBrush}">
+            <MenuItem Header="_Dosya">
+                <MenuItem Header="_Yeni Cari" Command="{Binding NewCariHesapCommand}"/>
+                <MenuItem Header="_Yeni İrsaliye" Command="{Binding NewIrsaliyeCommand}"/>
+                <MenuItem Header="_Yeni Fatura" Command="{Binding NewFaturaCommand}"/>
+                <Separator/>
+                <MenuItem Header="Ç_ıkış" Command="{Binding ExitAppCommand}"/>
+            </MenuItem>
+            <MenuItem Header="_Görünüm">
+                <MenuItem Header="_Ana Sayfa" Command="{Binding GoToDashboardCommand}"/>
+                <Separator/>
+                <MenuItem Header="_Cari Hesaplar" Command="{Binding NavigateToCommand}" CommandParameter="CariHesaplar"/>
+                <MenuItem Header="_Ürünler" Command="{Binding NavigateToCommand}" CommandParameter="Urunler"/>
+                <MenuItem Header="_Stok Durumu" Command="{Binding NavigateToCommand}" CommandParameter="StokDurumu"/>
+            </MenuItem>
+            <MenuItem Header="_İşlemler">
+                <MenuItem Header="_Hal Kayıt (Alış)" Command="{Binding NavigateToCommand}" CommandParameter="HalKayit"/>
+                <MenuItem Header="_Şubeye Satış" Command="{Binding NavigateToCommand}" CommandParameter="SevkiyatGiris"/>
+                <MenuItem Header="_Hızlı Satış" Command="{Binding NavigateToCommand}" CommandParameter="HizliSatis"/>
+                <Separator/>
+                <MenuItem Header="_Giriş İrsaliyesi" Command="{Binding NavigateToCommand}" CommandParameter="GirisIrsaliye"/>
+                <MenuItem Header="_Satış Faturası" Command="{Binding NavigateToCommand}" CommandParameter="SatisFatura"/>
+                <MenuItem Header="_Fatura Listesi" Command="{Binding NavigateToCommand}" CommandParameter="FaturaListesi"/>
+            </MenuItem>
+            <MenuItem Header="_Finans">
+                <MenuItem Header="_Kasa Hesabı" Command="{Binding NavigateToCommand}" CommandParameter="KasaHesabi"/>
+                <MenuItem Header="_Cari Ekstre" Command="{Binding NavigateToCommand}" CommandParameter="CariExtre"/>
+                <MenuItem Header="_Şube Tahsilat" Command="{Binding NavigateToCommand}" CommandParameter="SubeTahsilat"/>
+                <MenuItem Header="_Şube Borç Raporu" Command="{Binding NavigateToCommand}" CommandParameter="SubeBorcRaporu"/>
+            </MenuItem>
+            <MenuItem Header="_Raporlar">
+                <MenuItem Header="_Rapor Merkezi" Command="{Binding NavigateToCommand}" CommandParameter="RaporMerkezi"/>
+                <MenuItem Header="_Günlük Rapor" Command="{Binding NavigateToCommand}" CommandParameter="GunlukRapor"/>
+                <Separator/>
+                <MenuItem Header="_Kasa Takip" Command="{Binding NavigateToCommand}" CommandParameter="KasaTakip"/>
+            </MenuItem>
+            <MenuItem Header="_Sistem">
+                <MenuItem Header="_Kullanıcı Yönetimi" Command="{Binding NavigateToCommand}" CommandParameter="Kullanicilar"/>
+                <MenuItem Header="_Yedekleme" Command="{Binding NavigateToCommand}" CommandParameter="Yedekleme"/>
+                <Separator/>
+                <MenuItem Header="_Ayarlar" Command="{Binding OpenSettingsCommand}"/>
+            </MenuItem>
+            <MenuItem Header="_Yardım">
+                <MenuItem Header="_Hakkında" Command="{Binding ShowAboutCommand}"/>
+            </MenuItem>
+        </Menu>
+
+        <!-- Status Bar -->
+        <Border DockPanel.Dock="Bottom" Classes="StatusBar">
+            <Grid>
+                <TextBlock Text="{Binding StatusMessage}" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="12"/>
+                <TextBlock Text="NeoHal v1.0.0" Foreground="{DynamicResource TextMutedBrush}" FontSize="12" HorizontalAlignment="Right"/>
+            </Grid>
+        </Border>
+
+        <!-- Main Content -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="260"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Left Sidebar -->
+            <Border Grid.Column="0" Background="{DynamicResource BackgroundMediumBrush}" BorderBrush="{DynamicResource BackgroundLightBrush}" BorderThickness="0,0,1,0">
+                <DockPanel>
+                    <!-- Logo Area -->
+                    <!-- Logo Area -->
+                    <Border DockPanel.Dock="Top" Padding="20,30" Background="Transparent">
+                        <StackPanel Spacing="10">
+                            <Image Source="/Assets/logo.png" Height="80" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Hal Otomasyon Sistemi" FontSize="12" 
+                                       Foreground="{DynamicResource TextSecondaryBrush}" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Navigation Menu -->
+                    <ScrollViewer>
+                        <StackPanel Spacing="4" Margin="16,10">
+                            <Button Classes="NavButton" Command="{Binding GoToDashboardCommand}">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="🏠"/>
+                                    <TextBlock Text="Ana Sayfa"/>
+                                </StackPanel>
+                            </Button>
+                            
+                            <TextBlock Text="OPERASYON" Classes="SectionTitle"/>
+                            
+                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="HalKayit">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="📥"/>
+                                    <TextBlock Text="Hal Kayıt (Alış)"/>
+                                </StackPanel>
+                            </Button>
+                            
+                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="SevkiyatGiris">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="🚛"/>
+                                    <TextBlock Text="Şubeye Satış"/>
+                                </StackPanel>
+                            </Button>
+                            
+                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="HizliSatis">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="⚡"/>
+                                    <TextBlock Text="Hızlı Satış"/>
+                                </StackPanel>
+                            </Button>
+
+                            <TextBlock Text="BELGELER" Classes="SectionTitle"/>
+
+                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="GirisIrsaliye">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="📋"/>
+                                    <TextBlock Text="Giriş İrsaliyesi"/>
+                                </StackPanel>
+                            </Button>
+                            
+                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="SatisFatura">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="🧾"/>
+                                    <TextBlock Text="Satış Faturası"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="FaturaListesi">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="📂"/>
+                                    <TextBlock Text="Fatura Listesi"/>
+                                </StackPanel>
+                            </Button>
+                            
+                            <TextBlock Text="YÖNETİM" Classes="SectionTitle"/>
+                            
+                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="CariHesaplar">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="👥"/>
+                                    <TextBlock Text="Cari Hesaplar"/>
+                                </StackPanel>
+                            </Button>
+                            
+                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="Urunler">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="🍅"/>
+                                    <TextBlock Text="Ürünler"/>
+                                </StackPanel>
+                            </Button>
+                            
+                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="StokDurumu">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="📦"/>
+                                    <TextBlock Text="Stok Durumu"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="KasaTakip">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="🔄"/>
+                                    <TextBlock Text="Kasa Takip"/>
+                                </StackPanel>
+                            </Button>
+                            
+                            <TextBlock Text="FİNANS" Classes="SectionTitle"/>
+                            
+                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="KasaHesabi">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="💰"/>
+                                    <TextBlock Text="Kasa Hesabı"/>
+                                </StackPanel>
+                            </Button>
+                            
+                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="CariExtre">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="💳"/>
+                                    <TextBlock Text="Cari Ekstre"/>
+                                </StackPanel>
+                            </Button>
+                            
+                            <TextBlock Text="RAPORLAR" Classes="SectionTitle"/>
+                            
+                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="RaporMerkezi">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="📊"/>
+                                    <TextBlock Text="Rapor Merkezi"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="GunlukRapor">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="📈"/>
+                                    <TextBlock Text="Günlük Rapor"/>
+                                </StackPanel>
+                            </Button>
+                            
+                            <TextBlock Text="SİSTEM" Classes="SectionTitle"/>
+                            
+                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="Kullanicilar">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="🔐"/>
+                                    <TextBlock Text="Kullanıcılar"/>
+                                </StackPanel>
+                            </Button>
+                            
+                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="Yedekleme">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="💾"/>
+                                    <TextBlock Text="Yedekleme"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </ScrollViewer>
+                </DockPanel>
+            </Border>
+
+            <!-- Right Content Area -->
+            <Grid Grid.Column="1" Background="White">
+                <!-- Dashboard (when no module selected) -->
+                <Grid IsVisible="{Binding CurrentViewModel, Converter={x:Static ObjectConverters.IsNull}}">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="30">
+                        <StackPanel Spacing="10">
+                            <TextBlock Text="👋 Hoş Geldiniz" FontSize="32" FontWeight="Bold" 
+                                       HorizontalAlignment="Center" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                            <TextBlock Text="NeoHal Otomasyon Sistemi" 
+                                       FontSize="16" HorizontalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                        </StackPanel>
+                        
+                        <!-- Quick Stats Row 1 -->
+                        <Grid ColumnDefinitions="*,*,*,*" Margin="0,20,0,0" Width="900">
+                            <Border Grid.Column="0" Classes="Card">
+                                <StackPanel Spacing="10">
+                                    <Grid>
+                                        <Ellipse Width="40" Height="40" Fill="{DynamicResource BackgroundMediumBrush}" HorizontalAlignment="Left"/>
+                                        <TextBlock Text="👥" FontSize="20" HorizontalAlignment="Left" Margin="10,8,0,0"/>
+                                    </Grid>
+                                    <TextBlock Text="{Binding ToplamCariHesap}" Classes="StatValue" HorizontalAlignment="Left"/>
+                                    <TextBlock Text="Cari Hesaplar" Classes="StatLabel" HorizontalAlignment="Left"/>
+                                </StackPanel>
+                            </Border>
+                            
+                            <Border Grid.Column="1" Classes="Card">
+                                <StackPanel Spacing="10">
+                                    <Grid>
+                                        <Ellipse Width="40" Height="40" Fill="{DynamicResource BackgroundMediumBrush}" HorizontalAlignment="Left"/>
+                                        <TextBlock Text="📋" FontSize="20" HorizontalAlignment="Left" Margin="10,8,0,0"/>
+                                    </Grid>
+                                    <TextBlock Text="{Binding BugunkuIrsaliye}" Classes="StatValue" HorizontalAlignment="Left" Foreground="{DynamicResource InfoBrush}"/>
+                                    <TextBlock Text="Bugünkü İrsaliye" Classes="StatLabel" HorizontalAlignment="Left"/>
+                                </StackPanel>
+                            </Border>
+                            
+                            <Border Grid.Column="2" Classes="Card">
+                                <StackPanel Spacing="10">
+                                    <Grid>
+                                        <Ellipse Width="40" Height="40" Fill="{DynamicResource BackgroundMediumBrush}" HorizontalAlignment="Left"/>
+                                        <TextBlock Text="🧾" FontSize="20" HorizontalAlignment="Left" Margin="10,8,0,0"/>
+                                    </Grid>
+                                    <TextBlock Text="{Binding BugunkuFatura}" Classes="StatValue" HorizontalAlignment="Left" Foreground="{DynamicResource WarningBrush}"/>
+                                    <TextBlock Text="Bugünkü Fatura" Classes="StatLabel" HorizontalAlignment="Left"/>
+                                </StackPanel>
+                            </Border>
+                            
+                            <Border Grid.Column="3" Classes="Card">
+                                <StackPanel Spacing="10">
+                                    <Grid>
+                                        <Ellipse Width="40" Height="40" Fill="{DynamicResource BackgroundMediumBrush}" HorizontalAlignment="Left"/>
+                                        <TextBlock Text="📦" FontSize="20" HorizontalAlignment="Left" Margin="10,8,0,0"/>
+                                    </Grid>
+                                    <TextBlock Text="{Binding ToplamUrun}" Classes="StatValue" HorizontalAlignment="Left" Foreground="{DynamicResource ErrorBrush}"/>
+                                    <TextBlock Text="Toplam Ürün" Classes="StatLabel" HorizontalAlignment="Left"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                        
+                        <!-- Quick Stats Row 2 -->
+                        <Grid ColumnDefinitions="*,*" Width="600" Margin="0,10,0,0">
+                            <Border Grid.Column="0" Classes="Card">
+                                <StackPanel Spacing="15">
+                                    <StackPanel Orientation="Horizontal" Spacing="10">
+                                        <TextBlock Text="📈" FontSize="24"/>
+                                        <TextBlock Text="Bugünkü Giriş" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding GunlukGiris, StringFormat=0.00}" FontSize="32" FontWeight="Bold" Foreground="{DynamicResource InfoBrush}"/>
+                                        <TextBlock Text=" kg" FontSize="16" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Bottom" Margin="4,0,0,6"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                            
+                            <Border Grid.Column="1" Classes="Card">
+                                <StackPanel Spacing="15">
+                                    <StackPanel Orientation="Horizontal" Spacing="10">
+                                        <TextBlock Text="💰" FontSize="24"/>
+                                        <TextBlock Text="Bugünkü Satış" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="₺" FontSize="20" Foreground="{DynamicResource SuccessBrush}" VerticalAlignment="Bottom" Margin="0,0,2,6"/>
+                                        <TextBlock Text="{Binding GunlukSatis, StringFormat=0.00}" FontSize="32" FontWeight="Bold" Foreground="{DynamicResource SuccessBrush}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                        
+                        <Button Classes="PrimaryButton" Command="{Binding RefreshDashboardCommand}" 
+                                Content="🔄 Verileri Yenile" HorizontalAlignment="Center" Margin="0,20,0,0"/>
+                    </StackPanel>
+                </Grid>
+                
+                <!-- Dynamic Content -->
+                <ContentControl Content="{Binding CurrentViewModel}" 
+                                IsVisible="{Binding CurrentViewModel, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <ContentControl.DataTemplates>
+                        <DataTemplate DataType="vm:CariHesapViewModel">
+                            <views:CariHesapView/>
+                        </DataTemplate>
+                        <DataTemplate DataType="vm:UrunViewModel">
+                            <views:UrunView/>
+                        </DataTemplate>
+                        <DataTemplate DataType="vm:UrunGrubuViewModel">
+                            <views:UrunGrubuView/>
+                        </DataTemplate>
+                        <DataTemplate DataType="vm:KapTipiViewModel">
+                            <views:KapTipiView/>
+                        </DataTemplate>
+                        <DataTemplate DataType="vm:GirisIrsaliyesiListViewModel">
+                            <views:GirisIrsaliyesiView/>
+                        </DataTemplate>
+                        <DataTemplate DataType="vm:SatisFaturasiListViewModel">
+                            <views:SatisFaturasiView/>
+                        </DataTemplate>
+                        <DataTemplate DataType="vm:KasaHesabiViewModel">
+                            <views:KasaHesabiView/>
+                        </DataTemplate>
+                        <DataTemplate DataType="vm:HizliSatisViewModel">
+                            <views:HizliSatisView/>
+                        </DataTemplate>
+                        <DataTemplate DataType="vm:HalKayitViewModel">
+                            <views:HalKayitView/>
+                        </DataTemplate>
+                        <DataTemplate DataType="vm:SevkiyatGirisViewModel">
+                            <views:SevkiyatGirisView/>
+                        </DataTemplate>
+                        <DataTemplate DataType="vm:SubeBorcRaporuViewModel">
+                            <views:SubeBorcRaporuView/>
+                        </DataTemplate>
+                        <DataTemplate DataType="vm:StokDurumuViewModel">
+                            <views:StokDurumuView/>
+                        </DataTemplate>
+                        <DataTemplate DataType="vm:FaturaListesiViewModel">
+                            <views:FaturaListesiView/>
+                        </DataTemplate>
+                        <DataTemplate DataType="vm:CariExtreViewModel">
+                            <views:CariExtreView/>
+                        </DataTemplate>
+                        <DataTemplate DataType="vm:KasaTakipViewModel">
+                            <views:KasaTakipView/>
+                        </DataTemplate>
+                        <DataTemplate DataType="vm:GunlukRaporViewModel">
+                            <views:GunlukRaporView/>
+                        </DataTemplate>
+                        <DataTemplate DataType="vm:SubeTahsilatViewModel">
+                            <views:SubeTahsilatView/>
+                        </DataTemplate>
+                        <DataTemplate DataType="vm:KullaniciViewModel">
+                            <views:KullaniciView/>
+                        </DataTemplate>
+                        <DataTemplate DataType="vm:BackupViewModel">
+                            <views:BackupView/>
+                        </DataTemplate>
+                        <DataTemplate DataType="vm:RaporViewModel">
+                            <views:RaporView/>
+                        </DataTemplate>
+                    </ContentControl.DataTemplates>
+                </ContentControl>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>

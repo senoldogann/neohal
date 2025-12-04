@@ -1,0 +1,289 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:NeoHal.Desktop.ViewModels"
+             xmlns:entities="using:NeoHal.Core.Entities"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="700"
+             x:Class="NeoHal.Desktop.Views.HalKayitView"
+             x:DataType="vm:HalKayitViewModel">
+
+    <UserControl.KeyBindings>
+        <KeyBinding Gesture="F3" Command="{Binding YeniCommand}" />
+        <KeyBinding Gesture="F5" Command="{Binding KaydetCommand}" />
+        <KeyBinding Gesture="F6" Command="{Binding OnaytaCommand}" />
+    </UserControl.KeyBindings>
+    
+    <Grid RowDefinitions="Auto,Auto,Auto,*,Auto,Auto">
+        
+        <!-- Üst Bar - Başlık -->
+        <Border Grid.Row="0" Classes="PageHeader">
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel>
+                    <TextBlock Text="🏪 HAL KAYIT (ALIŞ)" Classes="PageTitle"/>
+                    <TextBlock Text="Komisyoncu ve ürünü satırda seç → Kaydet" Classes="PageSubtitle"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                    <Button Content="📂 Taslaklar" Command="{Binding TaslakPaneliAcKapatCommand}" 
+                            Classes="WarningButton"
+                            ToolTip.Tip="Yarım kalan kayıtları göster"/>
+                    <Button Content="📄 Yeni (F3)" Command="{Binding YeniCommand}" 
+                            Classes="SuccessButton"/>
+                    <Button Content="💾 Taslak Kaydet (F5)" Command="{Binding KaydetCommand}" 
+                            Classes="WarningButton"
+                            ToolTip.Tip="Yarım kalan alışı kaydet, devam edebilirsin"/>
+                    <Button Content="✅ Kaydet (F6)" Command="{Binding OnaytaCommand}" 
+                            Classes="PrimaryButton"
+                            ToolTip.Tip="Alışı tamamla ve onayla"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+        
+        <!-- Taslak İrsaliyeler Paneli -->
+        <Border Grid.Row="1" Background="{DynamicResource BackgroundDarkBrush}" Padding="15" 
+                IsVisible="{Binding TaslakPanelAcik}" BorderBrush="{DynamicResource WarningBrush}" BorderThickness="0,0,0,1">
+            <Grid RowDefinitions="Auto,Auto">
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <TextBlock Text="📂 YARIM KALAN KAYITLAR" FontWeight="Bold" Foreground="{DynamicResource WarningBrush}" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding TaslakIrsaliyeler.Count, StringFormat='({0} taslak)'}" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                </StackPanel>
+                <ItemsControl Grid.Row="1" ItemsSource="{Binding TaslakIrsaliyeler}" Margin="0,10,0,0">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="entities:GirisIrsaliyesi">
+                            <Border Classes="Card" Width="200" Margin="0,0,10,10">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding IrsaliyeNo}" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                        <TextBlock Text="{Binding Tarih, StringFormat=dd.MM.yyyy}" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                                        <TextBlock Text="{Binding ToplamNet, StringFormat={}{0:N2} kg}" Foreground="{DynamicResource SuccessBrush}" FontWeight="Bold"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="5" VerticalAlignment="Center" Margin="10,0,0,0">
+                                        <Button Content="📂" ToolTip.Tip="Yükle" 
+                                                Command="{Binding $parent[UserControl].((vm:HalKayitViewModel)DataContext).TaslakYukleCommand}"
+                                                CommandParameter="{Binding}"
+                                                Classes="WarningButton" Padding="8,4"/>
+                                        <Button Content="🗑" ToolTip.Tip="Sil"
+                                                Command="{Binding $parent[UserControl].((vm:HalKayitViewModel)DataContext).TaslakSilCommand}"
+                                                CommandParameter="{Binding}"
+                                                Classes="DangerButton" Padding="8,4"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+        </Border>
+        
+        <!-- Kayıt Bilgileri -->
+        <Border Grid.Row="2" Classes="Toolbar">
+            <Grid ColumnDefinitions="Auto,280,30,Auto,200,*,Auto">
+                <TextBlock Text="Tarih:" Classes="FormLabel"/>
+                <DatePicker Grid.Column="1" SelectedDate="{Binding KayitTarihi}" MinWidth="260"/>
+                
+                <TextBlock Grid.Column="3" Text="İrsaliye No:" Classes="FormLabel"/>
+                <TextBox Grid.Column="4" Text="{Binding IrsaliyeNo}" IsReadOnly="True" Classes="FormInput"/>
+                
+                <TextBlock Grid.Column="6" Text="{Binding StatusMessage}" Foreground="{DynamicResource SuccessBrush}" 
+                           VerticalAlignment="Center" FontWeight="SemiBold"/>
+            </Grid>
+        </Border>
+        
+        <!-- ANA TABLO -->
+        <Border Grid.Row="3" Classes="ContentArea">
+            <DataGrid ItemsSource="{Binding Kalemler}"
+                      SelectedItem="{Binding SelectedKalem}"
+                      AutoGenerateColumns="False"
+                      CanUserResizeColumns="True"
+                      IsReadOnly="False"
+                      SelectionMode="Single"
+                      x:Name="MainDataGrid">
+                
+                <DataGrid.Columns>
+                    <!-- KOMİSYONCU -->
+                    <DataGridTemplateColumn Header="Komisyoncu" Width="180" MinWidth="140">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate x:DataType="vm:HalKayitKalem">
+                                <StackPanel Orientation="Horizontal" Spacing="5" Margin="8,4">
+                                    <TextBlock Text="{Binding KomisyoncuKodu}" Foreground="{DynamicResource SuccessBrush}" FontSize="11"/>
+                                    <TextBlock Text="{Binding KomisyoncuAdi}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate x:DataType="vm:HalKayitKalem">
+                                <AutoCompleteBox ItemsSource="{Binding $parent[DataGrid].((vm:HalKayitViewModel)DataContext).Komisyoncular}"
+                                                 SelectedItem="{Binding Komisyoncu}"
+                                                 FilterMode="ContainsOrdinal"
+                                                 MinimumPrefixLength="0"
+                                                 Watermark="Komisyoncu seç..."
+                                                 ValueMemberBinding="{Binding Unvan}">
+                                    <AutoCompleteBox.ItemTemplate>
+                                        <DataTemplate x:DataType="entities:CariHesap">
+                                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                                <TextBlock Text="{Binding Kod}" Foreground="{DynamicResource SuccessBrush}" Width="50" FontWeight="Bold"/>
+                                                <TextBlock Text="{Binding Unvan}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </AutoCompleteBox.ItemTemplate>
+                                </AutoCompleteBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
+                    
+                    <!-- ÜRÜN -->
+                    <DataGridTemplateColumn Header="Ürün" Width="180" MinWidth="140">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate x:DataType="vm:HalKayitKalem">
+                                <StackPanel Orientation="Horizontal" Spacing="5" Margin="8,4">
+                                    <TextBlock Text="{Binding Urun.Kod}" Foreground="{DynamicResource TextMutedBrush}" FontSize="11"/>
+                                    <TextBlock Text="{Binding UrunAdi}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate x:DataType="vm:HalKayitKalem">
+                                <AutoCompleteBox ItemsSource="{Binding $parent[DataGrid].((vm:HalKayitViewModel)DataContext).Urunler}"
+                                                 SelectedItem="{Binding Urun}"
+                                                 FilterMode="ContainsOrdinal"
+                                                 MinimumPrefixLength="0"
+                                                 Watermark="Yaz: PAT, BIB..."
+                                                 ValueMemberBinding="{Binding Ad}">
+                                    <AutoCompleteBox.ItemTemplate>
+                                        <DataTemplate x:DataType="entities:Urun">
+                                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                                <TextBlock Text="{Binding Kod}" Foreground="{DynamicResource SuccessBrush}" Width="50" FontWeight="Bold"/>
+                                                <TextBlock Text="{Binding Ad}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </AutoCompleteBox.ItemTemplate>
+                                </AutoCompleteBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
+                    
+                    <!-- KAP TİPİ -->
+                    <DataGridTemplateColumn Header="Kap Tipi" Width="120" MinWidth="100">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate x:DataType="vm:HalKayitKalem">
+                                <TextBlock Text="{Binding KapTipiAdi}" Padding="8,4" VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate x:DataType="vm:HalKayitKalem">
+                                <AutoCompleteBox ItemsSource="{Binding $parent[DataGrid].((vm:HalKayitViewModel)DataContext).KapTipleri}"
+                                                 SelectedItem="{Binding KapTipi}"
+                                                 FilterMode="ContainsOrdinal"
+                                                 MinimumPrefixLength="0"
+                                                 Watermark="KÜÇ, PLA..."
+                                                 ValueMemberBinding="{Binding Ad}">
+                                    <AutoCompleteBox.ItemTemplate>
+                                        <DataTemplate x:DataType="entities:KapTipi">
+                                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                                <TextBlock Text="{Binding Kod}" Foreground="{DynamicResource WarningBrush}" Width="40"/>
+                                                <TextBlock Text="{Binding Ad}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </AutoCompleteBox.ItemTemplate>
+                                </AutoCompleteBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
+                    
+                    <!-- KAP ADET -->
+                    <DataGridTextColumn Header="Kap Adet" Width="80" MinWidth="70"
+                                        Binding="{Binding KapAdet}"/>
+                    
+                    <!-- DARALI KG -->
+                    <DataGridTextColumn Header="Daralı Kg" Width="90" MinWidth="80"
+                                        Binding="{Binding DaraliKg, StringFormat=N2}"/>
+                    
+                    <!-- NET KG -->
+                    <DataGridTextColumn Header="Net Kg" Width="90" MinWidth="80"
+                                        Binding="{Binding NetKg, StringFormat=N2}"
+                                        IsReadOnly="True"
+                                        Foreground="{DynamicResource SuccessBrush}"/>
+                    
+                    <!-- BİRİM FİYAT -->
+                    <DataGridTextColumn Header="Fiyat (₺)" Width="90" MinWidth="80"
+                                        Binding="{Binding BirimFiyat, StringFormat=N2}"/>
+                    
+                    <!-- TUTAR -->
+                    <DataGridTextColumn Header="Tutar (₺)" Width="100" MinWidth="90"
+                                        Binding="{Binding Tutar, StringFormat=N2}"
+                                        IsReadOnly="True"
+                                        Foreground="{DynamicResource WarningBrush}"
+                                        FontWeight="Bold"/>
+                    
+                    <!-- İŞLEMLER -->
+                    <DataGridTemplateColumn Header="İşlem" Width="75" MinWidth="70">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate x:DataType="vm:HalKayitKalem">
+                                <StackPanel Orientation="Horizontal" Spacing="2">
+                                    <Button Content="📋" 
+                                            Command="{Binding $parent[DataGrid].((vm:HalKayitViewModel)DataContext).KopyalaKalemCommand}"
+                                            CommandParameter="{Binding}"
+                                            Classes="NavButton"
+                                            Foreground="{DynamicResource InfoBrush}"
+                                            ToolTip.Tip="Satırı Kopyala"
+                                            Padding="5"/>
+                                    <Button Content="🗑" 
+                                            Command="{Binding $parent[DataGrid].((vm:HalKayitViewModel)DataContext).SilKalemCommand}"
+                                            CommandParameter="{Binding}"
+                                            Classes="NavButton"
+                                            Foreground="{DynamicResource ErrorBrush}"
+                                            ToolTip.Tip="Satırı Sil"
+                                            Padding="5"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+        
+        <!-- Alt Özet -->
+        <Border Grid.Row="4" Classes="SummaryBar">
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto,Auto">
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <TextBlock Text="Açıklama:" Classes="FormLabel"/>
+                    <TextBox Text="{Binding Aciklama}" Width="300" 
+                             Watermark="Opsiyonel not..." Classes="FormInput"/>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="2" Margin="0,0,30,0">
+                    <TextBlock Text="Komisyoncu" Classes="StatLabel"/>
+                    <TextBlock Text="{Binding ToplamKomisyoncu}" Classes="StatValue" Foreground="{DynamicResource InfoBrush}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="3" Margin="0,0,30,0">
+                    <TextBlock Text="Toplam Kap" Classes="StatLabel"/>
+                    <TextBlock Text="{Binding ToplamKap}" Classes="StatValue"/>
+                </StackPanel>
+                <StackPanel Grid.Column="4" Margin="0,0,30,0">
+                    <TextBlock Text="Toplam Kg" Classes="StatLabel"/>
+                    <TextBlock Text="{Binding ToplamKg, StringFormat=N2}" Classes="StatValue"/>
+                </StackPanel>
+                <StackPanel Grid.Column="5">
+                    <TextBlock Text="TOPLAM TUTAR" Classes="StatLabel" Foreground="{DynamicResource SuccessBrush}"/>
+                    <TextBlock Text="{Binding ToplamTutar, StringFormat=₺{0:N2}}" 
+                               FontSize="26" FontWeight="Bold" Foreground="{DynamicResource SuccessBrush}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+        
+        <!-- En Alt: Kısayol Bilgisi -->
+        <Border Grid.Row="5" Classes="ShortcutBar">
+            <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Text="F3: Yeni Kayıt | F5: Taslak Kaydet | F6: Kaydet &amp; Onayla | Enter: Yeni Satır | Tab: Sonraki Sütun"
+                           Foreground="{DynamicResource TextMutedBrush}" FontSize="11"/>
+                <Button Grid.Column="1" Content="+ Yeni Satır (Enter)" Command="{Binding YeniSatirCommand}"
+                        Classes="NavButton" Background="{DynamicResource BackgroundCardBrush}" Padding="15,5"/>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

@@ -1,0 +1,83 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:NeoHal.Desktop.ViewModels"
+             x:Class="NeoHal.Desktop.Views.UrunGrubuView"
+             x:DataType="vm:UrunGrubuViewModel">
+    
+    <Grid ColumnDefinitions="*,350">
+        <!-- Sol: Liste -->
+        <Grid Grid.Column="0" RowDefinitions="Auto, *, Auto">
+            <Border Grid.Row="0" Background="{DynamicResource BackgroundMediumBrush}" Padding="20,15">
+                <StackPanel Orientation="Horizontal" Spacing="15">
+                    <TextBlock Text="📦 Ürün Grupları" FontSize="22" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <Button Content="➕ Yeni Grup" Command="{Binding NewCommand}" 
+                            Background="#4CAF50" Foreground="White" 
+                            Padding="20,10" FontSize="14" FontWeight="SemiBold"/>
+                </StackPanel>
+            </Border>
+
+            <DataGrid Grid.Row="1" 
+                      ItemsSource="{Binding Gruplar}" 
+                      SelectedItem="{Binding SelectedGrup}"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True"
+                      GridLinesVisibility="Horizontal"
+                      BorderThickness="0"
+                      CanUserResizeColumns="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Kod" Binding="{Binding Kod}" Width="100"/>
+                    <DataGridTextColumn Header="Grup Adı" Binding="{Binding Ad}" Width="*"/>
+                    <DataGridCheckBoxColumn Header="Aktif" Binding="{Binding Aktif}" Width="70"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Border Grid.Row="2" Background="{DynamicResource BackgroundMediumBrush}" Padding="15,10">
+                <TextBlock Text="{Binding StatusMessage}" Foreground="#888"/>
+            </Border>
+        </Grid>
+
+        <!-- Sağ: Edit Panel -->
+        <Border Grid.Column="1" Background="{DynamicResource BackgroundMediumBrush}" 
+                BorderBrush="#3c3c3c" BorderThickness="1,0,0,0"
+                IsVisible="{Binding IsEditing}">
+            <StackPanel Margin="20">
+                <TextBlock Text="Yeni Grup" FontSize="18" FontWeight="Bold" 
+                           IsVisible="{Binding IsNew}" Margin="0,0,0,20"/>
+                <TextBlock Text="Grup Düzenle" FontSize="18" FontWeight="Bold" 
+                           IsVisible="{Binding !IsNew}" Margin="0,0,0,20"/>
+                
+                <TextBlock Text="Grup Kodu *" FontSize="12" Foreground="#ccc" Margin="0,0,0,5"/>
+                <TextBox Text="{Binding EditKod}" Watermark="Örn: MEY, SEB..."/>
+                
+                <TextBlock Text="Grup Adı *" FontSize="12" Foreground="#ccc" Margin="0,15,0,5"/>
+                <TextBox Text="{Binding EditAd}" Watermark="Örn: Meyveler, Sebzeler..."/>
+                
+                <CheckBox Content="Aktif" IsChecked="{Binding EditAktif}" Margin="0,20,0,0"/>
+                
+                <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,30,0,0" HorizontalAlignment="Right">
+                    <Button Content="İptal" Command="{Binding CancelCommand}" Padding="20,10"/>
+                    <Button Content="💾 Kaydet" Command="{Binding SaveCommand}" 
+                            Background="#4CAF50" Foreground="White" Padding="20,10"/>
+                </StackPanel>
+                
+                <Button Content="🗑 Sil" Command="{Binding DeleteCommand}" 
+                        IsVisible="{Binding !IsNew}"
+                        Background="#F44336" Foreground="White" 
+                        HorizontalAlignment="Stretch" Padding="10" Margin="0,20,0,0"/>
+            </StackPanel>
+        </Border>
+        
+        <!-- Sağ: Boş Panel (düzenleme yokken) -->
+        <Border Grid.Column="1" Background="{DynamicResource BackgroundMediumBrush}" 
+                BorderBrush="#3c3c3c" BorderThickness="1,0,0,0"
+                IsVisible="{Binding !IsEditing}">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="📦" FontSize="48" HorizontalAlignment="Center" Opacity="0.3"/>
+                <TextBlock Text="Düzenlemek için bir grup seçin" 
+                           Foreground="#666" Margin="0,10,0,0"/>
+                <TextBlock Text="veya yeni grup ekleyin" 
+                           Foreground="#555"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

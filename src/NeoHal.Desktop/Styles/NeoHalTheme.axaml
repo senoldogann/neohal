@@ -1,0 +1,296 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <!-- NeoHal Ortak Renk Şeması ve Stilleri -->
+    
+    <!-- Renk Tanımları -->
+    <Style>
+        <Style.Resources>
+            <!-- Ana Renkler -->
+            <Color x:Key="PrimaryColor">#0D47A1</Color>
+            <Color x:Key="PrimaryLightColor">#1565C0</Color>
+            <Color x:Key="PrimaryDarkColor">#0A3680</Color>
+            
+            <!-- Vurgu Renkleri -->
+            <Color x:Key="AccentColor">#4CAF50</Color>
+            <Color x:Key="AccentLightColor">#81C784</Color>
+            <Color x:Key="AccentDarkColor">#388E3C</Color>
+            
+            <!-- Arkaplan Renkleri (Pure White Mode) -->
+            <Color x:Key="BackgroundDarkColor">#FFFFFF</Color>
+            <Color x:Key="BackgroundMediumColor">#FFFFFF</Color>
+            <Color x:Key="BackgroundLightColor">#FFFFFF</Color>
+            <Color x:Key="BackgroundCardColor">#FFFFFF</Color>
+            
+            <!-- Metin Renkleri (High Contrast) -->
+            <Color x:Key="TextPrimaryColor">#000000</Color>
+            <Color x:Key="TextSecondaryColor">#000000</Color>
+            <Color x:Key="TextMutedColor">#404040</Color>
+            
+            <!-- Durum Renkleri -->
+            <Color x:Key="SuccessColor">#059669</Color>
+            <Color x:Key="WarningColor">#D97706</Color>
+            <Color x:Key="ErrorColor">#DC2626</Color>
+            <Color x:Key="InfoColor">#2563EB</Color>
+            
+            <!-- Özel Modül Renkleri -->
+            <Color x:Key="HalKayitColor">#15803D</Color>
+            <Color x:Key="SevkiyatColor">#1D4ED8</Color>
+            <Color x:Key="FaturaColor">#7E22CE</Color>
+            <Color x:Key="TahsilatColor">#C2410C</Color>
+            <Color x:Key="StokColor">#1E40AF</Color>
+            <Color x:Key="KullaniciColor">#86198F</Color>
+            <Color x:Key="YedeklemeColor">#475569</Color>
+            <Color x:Key="RaporColor">#2563EB</Color>
+            
+            <!-- SolidColorBrush Tanımları -->
+            <SolidColorBrush x:Key="PrimaryBrush" Color="{DynamicResource PrimaryColor}"/>
+            <SolidColorBrush x:Key="PrimaryLightBrush" Color="{DynamicResource PrimaryLightColor}"/>
+            <SolidColorBrush x:Key="AccentBrush" Color="{DynamicResource AccentColor}"/>
+            <SolidColorBrush x:Key="BackgroundDarkBrush" Color="{DynamicResource BackgroundDarkColor}"/>
+            <SolidColorBrush x:Key="BackgroundMediumBrush" Color="{DynamicResource BackgroundMediumColor}"/>
+            <SolidColorBrush x:Key="BackgroundLightBrush" Color="{DynamicResource BackgroundLightColor}"/>
+            <SolidColorBrush x:Key="BackgroundCardBrush" Color="{DynamicResource BackgroundCardColor}"/>
+            <SolidColorBrush x:Key="TextPrimaryBrush" Color="{DynamicResource TextPrimaryColor}"/>
+            <SolidColorBrush x:Key="TextSecondaryBrush" Color="{DynamicResource TextSecondaryColor}"/>
+            <SolidColorBrush x:Key="TextMutedBrush" Color="{DynamicResource TextMutedColor}"/>
+            <SolidColorBrush x:Key="SuccessBrush" Color="{DynamicResource SuccessColor}"/>
+            <SolidColorBrush x:Key="WarningBrush" Color="{DynamicResource WarningColor}"/>
+            <SolidColorBrush x:Key="ErrorBrush" Color="{DynamicResource ErrorColor}"/>
+            <SolidColorBrush x:Key="InfoBrush" Color="{DynamicResource InfoColor}"/>
+            <SolidColorBrush x:Key="PrimaryAccentBrush" Color="#2563EB"/> <!-- Blue 600 -->
+        </Style.Resources>
+    </Style>
+
+    <!-- DatePicker Style -->
+    <Style Selector="DatePicker">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="BorderBrush" Value="#000000"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="Padding" Value="10,6"/>
+        <Setter Property="Height" Value="36"/>
+    </Style>
+    <Style Selector="DatePicker:pointerover /template/ Border#Background">
+        <Setter Property="BorderBrush" Value="#2563EB"/>
+    </Style>
+    
+    <!-- NeoHal Modern Theme Styles -->
+    
+    <!-- Card Style -->
+    <Style Selector="Border.Card">
+        <Setter Property="Background" Value="{DynamicResource BackgroundCardBrush}"/>
+        <Setter Property="CornerRadius" Value="12"/>
+        <Setter Property="Padding" Value="20"/>
+        <Setter Property="Margin" Value="8"/>
+        <Setter Property="BoxShadow" Value="0 2 4 0 #1A000000"/>
+        <Setter Property="BorderBrush" Value="#E5E5E5"/>
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+
+    <!-- Page Header Style -->
+    <Style Selector="Border.PageHeader">
+        <Setter Property="Background" Value="{DynamicResource BackgroundMediumBrush}"/>
+        <Setter Property="Padding" Value="24,20"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        <Setter Property="BorderBrush" Value="#E5E5E5"/>
+    </Style>
+
+    <Style Selector="TextBlock.PageTitle">
+        <Setter Property="FontSize" Value="28"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+        <Setter Property="FontFamily" Value="Inter"/>
+    </Style>
+
+    <Style Selector="TextBlock.PageSubtitle">
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+        <Setter Property="Margin" Value="0,4,0,0"/>
+    </Style>
+    
+    <!-- Bölüm Başlığı -->
+    <Style Selector="TextBlock.SectionTitle">
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="#000000"/>
+        <Setter Property="Margin" Value="10,15,0,5"/>
+    </Style>
+    
+    <!-- Ana Buton Stili -->
+    <Style Selector="Button.PrimaryButton">
+        <Setter Property="Background" Value="{DynamicResource PrimaryAccentBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Padding" Value="20,10"/>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Property="Background" Duration="0:0:0.2"/>
+                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1"/>
+            </Transitions>
+        </Setter>
+    </Style>
+    <Style Selector="Button.PrimaryButton:pointerover">
+        <Setter Property="Background" Value="#2563EB"/> <!-- Blue 600 -->
+    </Style>
+    <Style Selector="Button.PrimaryButton:pressed">
+        <Setter Property="RenderTransform" Value="scale(0.98)"/>
+    </Style>
+
+    <!-- Başarı Butonu -->
+    <Style Selector="Button.SuccessButton">
+        <Setter Property="Background" Value="{DynamicResource SuccessBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Padding" Value="20,10"/>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Cursor" Value="Hand"/>
+    </Style>
+    <Style Selector="Button.SuccessButton:pointerover">
+        <Setter Property="Background" Value="#059669"/> <!-- Emerald 600 -->
+    </Style>
+    
+    <!-- Uyarı Butonu -->
+    <Style Selector="Button.WarningButton">
+        <Setter Property="Background" Value="{DynamicResource WarningBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Padding" Value="15,8"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
+    
+    <!-- Tehlike Butonu -->
+    <Style Selector="Button.DangerButton">
+        <Setter Property="Background" Value="{DynamicResource ErrorBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Padding" Value="15,8"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
+    
+    <!-- Navigasyon Butonu (Sidebar) -->
+    <Style Selector="Button.NavButton">
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="Padding" Value="16,14"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="#000000"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="Margin" Value="0,2"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Property="Background" Duration="0:0:0.2"/>
+                <BrushTransition Property="Foreground" Duration="0:0:0.2"/>
+            </Transitions>
+        </Setter>
+    </Style>
+    <Style Selector="Button.NavButton:pointerover">
+        <Setter Property="Background" Value="#F3F4F6"/>
+        <Setter Property="Foreground" Value="#000000"/>
+    </Style>
+    
+    <!-- Active Navigation Button -->
+    <Style Selector="Button.NavButton.Active">
+        <Setter Property="Background" Value="{DynamicResource PrimaryAccentBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
+    
+    <!-- Form Controls -->
+    <Style Selector="TextBox">
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="Padding" Value="12,8"/>
+        <Setter Property="Background" Value="{DynamicResource BackgroundDarkBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource BackgroundLightBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+    </Style>
+    <Style Selector="TextBox:focus">
+        <Setter Property="BorderBrush" Value="{DynamicResource PrimaryAccentBrush}"/>
+    </Style>
+
+    <Style Selector="TextBlock.FormLabel">
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Margin" Value="0,0,0,6"/>
+    </Style>
+    
+    <!-- DataGrid Modern Style -->
+    <Style Selector="DataGrid">
+        <Setter Property="Background" Value="{DynamicResource BackgroundCardBrush}"/>
+        <Setter Property="RowBackground" Value="{DynamicResource BackgroundCardBrush}"/>
+        <Setter Property="HeadersVisibility" Value="Column"/>
+        <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+        <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource BackgroundLightBrush}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+    
+    <Style Selector="DataGridColumnHeader">
+        <Setter Property="Background" Value="{DynamicResource BackgroundMediumBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+        <Setter Property="Padding" Value="12,10"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="SeparatorBrush" Value="Transparent"/>
+    </Style>
+    
+    <Style Selector="DataGridRow">
+        <Setter Property="Padding" Value="0,8"/>
+    </Style>
+    
+    <Style Selector="DataGridCell">
+        <Setter Property="Padding" Value="12,8"/>
+    </Style>
+    
+    <!-- İstatistik Değer Stili -->
+    <Style Selector="TextBlock.StatValue">
+        <Setter Property="FontSize" Value="24"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+    </Style>
+    
+    <!-- İstatistik Etiket Stili -->
+    <Style Selector="TextBlock.StatLabel">
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+        <Setter Property="Margin" Value="0,4,0,0"/>
+    </Style>
+    
+    <!-- Durum Çubuğu Stili -->
+    <Style Selector="Border.StatusBar">
+        <Setter Property="Background" Value="{DynamicResource BackgroundMediumBrush}"/>
+        <Setter Property="Padding" Value="10,5"/>
+        <Setter Property="BorderBrush" Value="#E5E5E5"/>
+        <Setter Property="BorderThickness" Value="0,1,0,0"/>
+    </Style>
+    
+    <!-- Toolbar Stili -->
+    <Style Selector="Border.Toolbar">
+        <Setter Property="Background" Value="{DynamicResource BackgroundDarkBrush}"/>
+        <Setter Property="Padding" Value="15"/>
+    </Style>
+    
+    <!-- Content Area Stili -->
+    <Style Selector="Border.ContentArea">
+        <Setter Property="Background" Value="{DynamicResource BackgroundMediumBrush}"/>
+        <Setter Property="Padding" Value="10"/>
+    </Style>
+    
+    <!-- Summary Bar Stili -->
+    <Style Selector="Border.SummaryBar">
+        <Setter Property="Background" Value="{DynamicResource BackgroundDarkBrush}"/>
+        <Setter Property="Padding" Value="15"/>
+    </Style>
+    
+    <!-- Shortcut Bar Stili -->
+    <Style Selector="Border.ShortcutBar">
+        <Setter Property="Background" Value="{DynamicResource BackgroundMediumBrush}"/>
+        <Setter Property="Padding" Value="10,8"/>
+    </Style>
+    
+</Styles>

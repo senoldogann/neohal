@@ -1,0 +1,149 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:NeoHal.Desktop.ViewModels"
+             xmlns:entities="using:NeoHal.Core.Entities"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="700"
+             x:Class="NeoHal.Desktop.Views.SubeBorcRaporuView"
+             x:DataType="vm:SubeBorcRaporuViewModel">
+    
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+        
+        <!-- Başlık -->
+        <Border Grid.Row="0" Background="{DynamicResource PrimaryBrush}" Padding="20,15">
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel>
+                    <TextBlock Text="📈 ŞUBE BORÇ/ALACAK RAPORU" FontSize="24" FontWeight="Bold" Foreground="White"/>
+                    <TextBlock Text="Şubelerin size olan borçlarını takip edin" Foreground="#90caf9" FontSize="13"/>
+                </StackPanel>
+                <Button Grid.Column="1" Content="🔄 Yenile" Command="{Binding YenileCommand}" 
+                        Background="{DynamicResource PrimaryLightBrush}" Foreground="White" Padding="15,8"/>
+            </Grid>
+        </Border>
+        
+        <!-- Özet Kartları -->
+        <Border Grid.Row="1" Background="{DynamicResource BackgroundDarkBrush}" Padding="15">
+            <Grid ColumnDefinitions="*,*,*,2*">
+                <Border Grid.Column="0" Background="{DynamicResource BackgroundMediumBrush}" CornerRadius="8" Padding="20" Margin="5">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="📊 Toplam Alacak" Foreground="#888" FontSize="12"/>
+                        <TextBlock Text="{Binding ToplamBorc, StringFormat=₺{0:N2}}" 
+                                   FontSize="24" FontWeight="Bold" Foreground="#F44336"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="1" Background="{DynamicResource BackgroundMediumBrush}" CornerRadius="8" Padding="20" Margin="5">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="💰 Toplam Verecek" Foreground="#888" FontSize="12"/>
+                        <TextBlock Text="{Binding ToplamAlacak, StringFormat=₺{0:N2}}" 
+                                   FontSize="24" FontWeight="Bold" Foreground="#4CAF50"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="2" Background="{DynamicResource BackgroundMediumBrush}" CornerRadius="8" Padding="20" Margin="5">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="🏦 Net Bakiye" Foreground="#888" FontSize="12"/>
+                        <TextBlock Text="{Binding NetBakiye, StringFormat=₺{0:N2}}" 
+                                   FontSize="24" FontWeight="Bold" Foreground="#2196F3"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="3" Background="{DynamicResource BackgroundMediumBrush}" CornerRadius="8" Padding="15" Margin="5">
+                    <StackPanel>
+                        <TextBlock Text="{Binding StatusMessage}" Foreground="#aaa" FontSize="13" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+        
+        <!-- Ana İçerik - Sol: Şube Listesi, Sağ: Fatura Detay -->
+        <Grid Grid.Row="2" ColumnDefinitions="*,*">
+            <!-- Sol: Şube Listesi -->
+            <Border Grid.Column="0" Background="{DynamicResource BackgroundMediumBrush}" Padding="10" Margin="0,0,5,0">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top" Text="Şubeler" FontWeight="Bold" FontSize="14" 
+                               Foreground="White" Margin="0,0,0,10"/>
+                    
+                    <DataGrid ItemsSource="{Binding SubeBorclari}"
+                              SelectedItem="{Binding SelectedSube}"
+                              AutoGenerateColumns="False"
+                              GridLinesVisibility="Horizontal"
+                              BorderThickness="0"
+                              IsReadOnly="True"
+                              SelectionMode="Single"
+                              Background="Transparent"
+                              RowBackground="{DynamicResource BackgroundMediumBrush}">
+                        
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Şube" Width="180" MinWidth="100"
+                                                Binding="{Binding Sube.Unvan}"/>
+                            <DataGridTextColumn Header="Fatura" Width="70" MinWidth="60"
+                                                Binding="{Binding FaturaSayisi}"/>
+                            <DataGridTextColumn Header="Toplam" Width="100" MinWidth="80"
+                                                Binding="{Binding ToplamFatura, StringFormat=N2}"/>
+                            <DataGridTextColumn Header="Ödenen" Width="100" MinWidth="80"
+                                                Binding="{Binding OdenenTutar, StringFormat=N2}"/>
+                            <DataGridTemplateColumn Header="Kalan Borç" Width="120" MinWidth="100">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate x:DataType="vm:SubeBorcOzeti">
+                                        <TextBlock Text="{Binding KalanBorc, StringFormat=₺{0:N2}}"
+                                                   Foreground="{Binding DurumRenk}"
+                                                   FontWeight="Bold"
+                                                   Padding="5"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Son Fatura" Width="100" MinWidth="85"
+                                                Binding="{Binding SonFaturaTarihi, StringFormat=d}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </Border>
+            
+            <!-- Sağ: Seçili Şubenin Faturaları -->
+            <Border Grid.Column="1" Background="{DynamicResource BackgroundMediumBrush}" Padding="10" Margin="5,0,0,0">
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Top" Margin="0,0,0,10">
+                        <TextBlock Text="Fatura Detayları" FontWeight="Bold" FontSize="14" Foreground="White"/>
+                        <TextBlock Text="{Binding SelectedSube.Sube.Unvan, FallbackValue='Bir şube seçin'}" 
+                                   Foreground="#888" FontSize="12"/>
+                    </StackPanel>
+                    
+                    <DataGrid ItemsSource="{Binding SubeFaturalari}"
+                              AutoGenerateColumns="False"
+                              GridLinesVisibility="Horizontal"
+                              BorderThickness="0"
+                              IsReadOnly="True"
+                              Background="Transparent"
+                              RowBackground="{DynamicResource BackgroundMediumBrush}">
+                        
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Fatura No" Width="120" MinWidth="100"
+                                                Binding="{Binding FaturaNo}"/>
+                            <DataGridTextColumn Header="Tarih" Width="90" MinWidth="70"
+                                                Binding="{Binding FaturaTarihi, StringFormat=d}"/>
+                            <DataGridTextColumn Header="Tip" Width="80" MinWidth="60"
+                                                Binding="{Binding FaturaTipi}"/>
+                            <DataGridTextColumn Header="Tutar" Width="100" MinWidth="80"
+                                                Binding="{Binding GenelToplam, StringFormat=N2}"/>
+                            <DataGridTextColumn Header="Ödenen" Width="100" MinWidth="80"
+                                                Binding="{Binding OdenenTutar, StringFormat=N2}"/>
+                            <DataGridTemplateColumn Header="Durum" Width="80" MinWidth="70">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate x:DataType="entities:SatisFaturasi">
+                                        <TextBlock Text="{Binding OdemeDurumu}"
+                                                   Padding="5"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </Border>
+        </Grid>
+        
+        <!-- Alt Bilgi -->
+        <Border Grid.Row="3" Background="{DynamicResource BackgroundDarkBrush}" Padding="10">
+            <TextBlock Text="💡 İpucu: Bir şube seçerek o şubenin tüm faturalarını görebilirsiniz. Kırmızı = Borçlu, Yeşil = Alacaklı"
+                       Foreground="#666" FontSize="11"/>
+        </Border>
+    </Grid>
+</UserControl>
