@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NeoHal.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+80eb5d763e15ccac1c9d9690f91df7a44b03d860")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6890b8e16d7cb5762e548683b8f5fa16e4b69662")]
 [assembly: System.Reflection.AssemblyProductAttribute("NeoHal.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NeoHal.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

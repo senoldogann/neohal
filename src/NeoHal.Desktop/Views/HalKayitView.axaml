@@ -95,13 +95,18 @@
         </Border>
         
         <!-- ANA TABLO -->
-        <Border Grid.Row="3" Classes="ContentArea">
+        <Border Grid.Row="3" Background="White" Padding="10">
             <DataGrid ItemsSource="{Binding Kalemler}"
                       SelectedItem="{Binding SelectedKalem}"
                       AutoGenerateColumns="False"
                       CanUserResizeColumns="True"
+                      GridLinesVisibility="All"
+                      BorderThickness="1"
+                      BorderBrush="#E0E0E0"
                       IsReadOnly="False"
                       SelectionMode="Single"
+                      Background="White"
+                      RowBackground="White"
                       x:Name="MainDataGrid">
                 
                 <DataGrid.Columns>
@@ -109,12 +114,10 @@
                     <DataGridTemplateColumn Header="Komisyoncu" Width="180" MinWidth="140">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:DataType="vm:HalKayitKalem">
-                                <Border Background="White" BorderBrush="#E5E5E5" BorderThickness="1" CornerRadius="4" Margin="4,2" Padding="8,4">
-                                    <StackPanel Orientation="Horizontal" Spacing="5">
-                                        <TextBlock Text="{Binding KomisyoncuKodu}" Foreground="{DynamicResource SuccessBrush}" FontSize="11"/>
-                                        <TextBlock Text="{Binding KomisyoncuAdi}" VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Border>
+                                <StackPanel Orientation="Horizontal" Spacing="5" Margin="8,4">
+                                    <TextBlock Text="{Binding KomisyoncuKodu}" Foreground="{DynamicResource SuccessBrush}" FontSize="11"/>
+                                    <TextBlock Text="{Binding KomisyoncuAdi}" VerticalAlignment="Center"/>
+                                </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                         <DataGridTemplateColumn.CellEditingTemplate>
@@ -142,12 +145,10 @@
                     <DataGridTemplateColumn Header="Ürün" Width="180" MinWidth="140">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:DataType="vm:HalKayitKalem">
-                                <Border Background="White" BorderBrush="#E5E5E5" BorderThickness="1" CornerRadius="4" Margin="4,2" Padding="8,4">
-                                    <StackPanel Orientation="Horizontal" Spacing="5">
-                                        <TextBlock Text="{Binding Urun.Kod}" Foreground="{DynamicResource TextMutedBrush}" FontSize="11"/>
-                                        <TextBlock Text="{Binding UrunAdi}" VerticalAlignment="Center"/>
-                                    </StackPanel>
-                                </Border>
+                                <StackPanel Orientation="Horizontal" Spacing="5" Margin="8,4">
+                                    <TextBlock Text="{Binding Urun.Kod}" Foreground="{DynamicResource TextMutedBrush}" FontSize="11"/>
+                                    <TextBlock Text="{Binding UrunAdi}" VerticalAlignment="Center"/>
+                                </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                         <DataGridTemplateColumn.CellEditingTemplate>
@@ -175,9 +176,7 @@
                     <DataGridTemplateColumn Header="Kap Tipi" Width="120" MinWidth="100">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:DataType="vm:HalKayitKalem">
-                                <Border Background="White" BorderBrush="#E5E5E5" BorderThickness="1" CornerRadius="4" Margin="4,2" Padding="8,4">
-                                    <TextBlock Text="{Binding KapTipiAdi}" VerticalAlignment="Center"/>
-                                </Border>
+                                <TextBlock Text="{Binding KapTipiAdi}" Padding="8,4" VerticalAlignment="Center"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                         <DataGridTemplateColumn.CellEditingTemplate>
@@ -254,7 +253,7 @@
         </Border>
         
         <!-- Alt Özet -->
-        <Border Grid.Row="4" Classes="SummaryBar">
+        <Border Grid.Row="4" Background="White" Padding="15" BorderBrush="#E5E5E5" BorderThickness="0,1,0,0">
             <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto,Auto">
                 <StackPanel Orientation="Horizontal" Spacing="10">
                     <TextBlock Text="Açıklama:" Classes="FormLabel"/>
