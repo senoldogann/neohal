@@ -20,3 +20,4 @@
 /Users/dogan/Desktop/HAL-PROJEM/NeoHal/src/NeoHal.Core/obj/Debug/net9.0/refint/NeoHal.Core.dll
 /Users/dogan/Desktop/HAL-PROJEM/NeoHal/src/NeoHal.Core/obj/Debug/net9.0/NeoHal.Core.pdb
 /Users/dogan/Desktop/HAL-PROJEM/NeoHal/src/NeoHal.Core/obj/Debug/net9.0/ref/NeoHal.Core.dll
+/Users/dogan/Desktop/HAL-PROJEM/NeoHal/src/NeoHal.Core/obj/Debug/net9.0/NeoHal.Core.sourcelink.json

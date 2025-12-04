@@ -8,11 +8,11 @@
     <Grid RowDefinitions="Auto,Auto,*,Auto">
         
         <!-- Başlık Bar -->
-        <Border Grid.Row="0" Background="{DynamicResource FaturaColor}" Padding="20,15">
+        <Border Grid.Row="0" Background="{DynamicResource BackgroundMediumBrush}" Padding="20,15" BorderBrush="#E5E5E5" BorderThickness="0,0,0,1">
             <Grid ColumnDefinitions="*,Auto">
                 <StackPanel>
-                    <TextBlock Text="📊 CARİ HESAP EKSTRE" FontSize="24" FontWeight="Bold" Foreground="White"/>
-                    <TextBlock Text="Borç-Alacak hareketleri görüntüle" Foreground="#CE93D8" FontSize="13"/>
+                    <TextBlock Text="📊 CARİ HESAP EKSTRE" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                    <TextBlock Text="Borç-Alacak hareketleri görüntüle" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="15" VerticalAlignment="Center">
                     <Button Content="🔄 Yenile" Command="{Binding YenileCommand}" 
@@ -22,9 +22,9 @@
         </Border>
         
         <!-- Filtre ve Cari Seçimi -->
-        <Border Grid.Row="1" Background="{DynamicResource BackgroundDarkBrush}" Padding="15">
+        <Border Grid.Row="1" Background="White" Padding="15" BorderBrush="#E5E5E5" BorderThickness="0,0,0,1">
             <Grid ColumnDefinitions="Auto,300,30,Auto,200,30,Auto,200,30,Auto,*">
-                <TextBlock Text="Cari Hesap:" VerticalAlignment="Center" Foreground="#aaa"/>
+                <TextBlock Text="Cari Hesap:" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}"/>
                 <ComboBox Grid.Column="1" 
                           ItemsSource="{Binding CariHesaplar}"
                           SelectedItem="{Binding SelectedCari}"
@@ -34,7 +34,7 @@
                     <ComboBox.ItemTemplate>
                         <DataTemplate x:DataType="entities:CariHesap">
                             <StackPanel Orientation="Horizontal" Spacing="10">
-                                <TextBlock Text="{Binding Kod}" Foreground="#888" Width="60"/>
+                                <TextBlock Text="{Binding Kod}" Foreground="{DynamicResource TextSecondaryBrush}" Width="60"/>
                                 <TextBlock Text="{Binding Unvan}"/>
                                 <TextBlock Text="{Binding CariTipi}" Foreground="#7B1FA2" FontSize="10"/>
                             </StackPanel>
@@ -42,32 +42,32 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
                 
-                <TextBlock Grid.Column="3" Text="Başlangıç:" VerticalAlignment="Center" Foreground="#aaa"/>
+                <TextBlock Grid.Column="3" Text="Başlangıç:" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}"/>
                 <DatePicker Grid.Column="4" SelectedDate="{Binding BaslangicTarihi}"/>
                 
-                <TextBlock Grid.Column="6" Text="Bitiş:" VerticalAlignment="Center" Foreground="#aaa"/>
+                <TextBlock Grid.Column="6" Text="Bitiş:" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}"/>
                 <DatePicker Grid.Column="7" SelectedDate="{Binding BitisTarihi}"/>
                 
                 <Button Grid.Column="9" Content="🔍 Göster" Command="{Binding LoadExtreCommand}"
                         Background="{DynamicResource FaturaColor}" Foreground="White" Padding="15,8"/>
                 
                 <Button Grid.Column="10" Content="Temizle" Command="{Binding FiltreTemizleCommand}"
-                        Background="#333" Padding="10,8" HorizontalAlignment="Right"/>
+                        Background="{DynamicResource BackgroundMediumBrush}" Foreground="{DynamicResource TextPrimaryBrush}" Padding="10,8" HorizontalAlignment="Right"/>
             </Grid>
         </Border>
         
         <!-- Hareket Listesi -->
-        <Border Grid.Row="2" Background="{DynamicResource BackgroundMediumBrush}" Padding="10">
+        <Border Grid.Row="2" Background="White" Padding="10">
             <DataGrid ItemsSource="{Binding Hareketler}"
                       AutoGenerateColumns="False"
                       CanUserResizeColumns="True"
                       GridLinesVisibility="Horizontal"
                       BorderThickness="1"
-                      BorderBrush="#444"
+                      BorderBrush="#E5E5E5"
                       IsReadOnly="True"
                       SelectionMode="Single"
-                      Background="{DynamicResource BackgroundMediumBrush}"
-                      RowBackground="{DynamicResource BackgroundMediumBrush}">
+                      Background="White"
+                      RowBackground="White">
                 
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Tarih" Width="100" MinWidth="80" 
@@ -83,14 +83,14 @@
         </Border>
         
         <!-- Alt Özet -->
-        <Border Grid.Row="3" Background="{DynamicResource BackgroundMediumBrush}" Padding="15">
+        <Border Grid.Row="3" Background="White" Padding="15" BorderBrush="#E5E5E5" BorderThickness="0,1,0,0">
             <Grid ColumnDefinitions="*,Auto">
-                <TextBlock Text="{Binding StatusMessage}" Foreground="#888" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding StatusMessage}" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
                 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="30">
-                    <Border Background="#333" CornerRadius="5" Padding="20,10">
+                    <Border Background="{DynamicResource BackgroundMediumBrush}" CornerRadius="5" Padding="20,10">
                         <StackPanel>
-                            <TextBlock Text="TOPLAM BORÇ" Foreground="#888" FontSize="10"/>
+                            <TextBlock Text="TOPLAM BORÇ" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="{Binding ToplamBorc, StringFormat=N2}" 
                                            FontSize="20" FontWeight="Bold" Foreground="#F44336"/>
@@ -100,9 +100,9 @@
                         </StackPanel>
                     </Border>
                     
-                    <Border Background="#333" CornerRadius="5" Padding="20,10">
+                    <Border Background="{DynamicResource BackgroundMediumBrush}" CornerRadius="5" Padding="20,10">
                         <StackPanel>
-                            <TextBlock Text="TOPLAM ALACAK" Foreground="#888" FontSize="10"/>
+                            <TextBlock Text="TOPLAM ALACAK" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="10"/>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="{Binding ToplamAlacak, StringFormat=N2}" 
                                            FontSize="20" FontWeight="Bold" Foreground="#4CAF50"/>
@@ -114,7 +114,7 @@
                     
                     <Border Background="{DynamicResource FaturaColor}" CornerRadius="5" Padding="20,10">
                         <StackPanel>
-                            <TextBlock Text="{Binding BakiyeDurumu}" Foreground="#CE93D8" FontSize="10"/>
+                            <TextBlock Text="{Binding BakiyeDurumu}" Foreground="#E1BEE7" FontSize="10"/>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="{Binding Bakiye, StringFormat=N2}" 
                                            FontSize="20" FontWeight="Bold" Foreground="White"/>

@@ -32,3 +32,4 @@
 /Users/dogan/Desktop/HAL-PROJEM/NeoHal/src/NeoHal.Services/obj/Debug/net9.0/refint/NeoHal.Services.dll
 /Users/dogan/Desktop/HAL-PROJEM/NeoHal/src/NeoHal.Services/obj/Debug/net9.0/NeoHal.Services.pdb
 /Users/dogan/Desktop/HAL-PROJEM/NeoHal/src/NeoHal.Services/obj/Debug/net9.0/ref/NeoHal.Services.dll
+/Users/dogan/Desktop/HAL-PROJEM/NeoHal/src/NeoHal.Services/obj/Debug/net9.0/NeoHal.Services.sourcelink.json

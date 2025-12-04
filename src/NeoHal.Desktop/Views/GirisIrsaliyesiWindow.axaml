@@ -7,7 +7,7 @@
         Title="{Binding WindowTitle}"
         Width="1200" Height="800"
         WindowStartupLocation="CenterOwner"
-        Background="{DynamicResource BackgroundDarkBrush}"
+        Background="{DynamicResource BackgroundMediumBrush}"
         Name="IrsaliyeWindow">
     
     <Grid RowDefinitions="Auto,Auto,*,Auto">
@@ -21,26 +21,26 @@
                 </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="15" VerticalAlignment="Center">
                     <Button Content="İptal (ESC)" Command="{Binding CancelCommand}" 
-                            Background="{DynamicResource BackgroundMediumBrush}" Foreground="White" Padding="15,8"/>
+                            Classes="SecondaryButton"/>
                     <Button Content="💾 Kaydet (F9)" Command="{Binding SaveCommand}" 
-                            Background="#4CAF50" Foreground="White" Padding="20,8" FontWeight="Bold"/>
+                            Classes="SuccessButton"/>
                 </StackPanel>
             </Grid>
         </Border>
         
         <!-- Kayıt Bilgileri -->
-        <Border Grid.Row="1" Background="{DynamicResource BackgroundDarkBrush}" Padding="15">
+        <Border Grid.Row="1" Background="{DynamicResource BackgroundCardBrush}" Padding="15" Margin="10" CornerRadius="8" BorderBrush="#E5E5E5" BorderThickness="1">
             <Grid ColumnDefinitions="Auto,150,30,Auto,150,30,Auto,180,*">
-                <TextBlock Text="Tarih:" VerticalAlignment="Center" Foreground="#aaa"/>
+                <TextBlock Text="Tarih:" VerticalAlignment="Center" Classes="FormLabel"/>
                 <DatePicker Grid.Column="1" SelectedDate="{Binding Tarih}"/>
                 
-                <TextBlock Grid.Column="3" Text="İrsaliye No:" VerticalAlignment="Center" Foreground="#aaa"/>
-                <TextBox Grid.Column="4" Text="{Binding IrsaliyeNo}" IsReadOnly="True" Background="#333"/>
+                <TextBlock Grid.Column="3" Text="İrsaliye No:" VerticalAlignment="Center" Classes="FormLabel"/>
+                <TextBox Grid.Column="4" Text="{Binding IrsaliyeNo}" IsReadOnly="True" Classes="FormInput"/>
                 
                 <!-- Toplam Net -->
-                <Border Grid.Column="8" Background="#4CAF50" CornerRadius="8" Padding="20,8" HorizontalAlignment="Right" Margin="20,0,0,0">
+                <Border Grid.Column="8" Background="{DynamicResource SuccessBrush}" CornerRadius="8" Padding="20,8" HorizontalAlignment="Right" Margin="20,0,0,0">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="TOPLAM NET: " Foreground="#a5d6a7" FontSize="14" VerticalAlignment="Center"/>
+                        <TextBlock Text="TOPLAM NET: " Foreground="White" FontSize="14" VerticalAlignment="Center"/>
                         <TextBlock Text="{Binding ToplamNet, StringFormat=N2}" 
                                    FontSize="20" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
                         <TextBlock Text=" kg" FontSize="14" Foreground="White" VerticalAlignment="Center"/>
@@ -57,11 +57,11 @@
                       CanUserResizeColumns="True"
                       GridLinesVisibility="All"
                       BorderThickness="1"
-                      BorderBrush="#444"
+                      BorderBrush="#E5E5E5"
                       IsReadOnly="False"
                       SelectionMode="Single"
-                      Background="{DynamicResource BackgroundMediumBrush}"
-                      RowBackground="{DynamicResource BackgroundMediumBrush}"
+                      Background="White"
+                      RowBackground="White"
                       x:Name="MainDataGrid">
                 
                 <DataGrid.Columns>
@@ -210,45 +210,45 @@
             <Grid ColumnDefinitions="*,Auto">
                 <!-- Toplamlar -->
                 <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="30">
-                    <Border Background="#333" CornerRadius="5" Padding="15,10">
+                    <Border Background="White" BorderBrush="#E5E5E5" BorderThickness="1" CornerRadius="5" Padding="15,10">
                         <StackPanel>
-                            <TextBlock Text="TOPLAM KAP" Foreground="Gray" FontSize="10"/>
-                            <TextBlock Text="{Binding ToplamKapAdet}" FontSize="20" FontWeight="Bold" Foreground="White"/>
+                            <TextBlock Text="TOPLAM KAP" Classes="StatLabel" FontSize="10"/>
+                            <TextBlock Text="{Binding ToplamKapAdet}" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
                         </StackPanel>
                     </Border>
-                    <Border Background="#333" CornerRadius="5" Padding="15,10">
+                    <Border Background="White" BorderBrush="#E5E5E5" BorderThickness="1" CornerRadius="5" Padding="15,10">
                         <StackPanel>
-                            <TextBlock Text="DARALI KG" Foreground="Gray" FontSize="10"/>
+                            <TextBlock Text="DARALI KG" Classes="StatLabel" FontSize="10"/>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding ToplamDaraliKg, StringFormat=N2}" FontSize="20" FontWeight="Bold" Foreground="White"/>
-                                <TextBlock Text=" kg" FontSize="12" Foreground="Gray" VerticalAlignment="Bottom" Margin="0,0,0,3"/>
+                                <TextBlock Text="{Binding ToplamDaraliKg, StringFormat=N2}" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                <TextBlock Text=" kg" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Bottom" Margin="0,0,0,3"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
-                    <Border Background="#333" CornerRadius="5" Padding="15,10">
+                    <Border Background="White" BorderBrush="#E5E5E5" BorderThickness="1" CornerRadius="5" Padding="15,10">
                         <StackPanel>
-                            <TextBlock Text="TOPLAM DARA" Foreground="Gray" FontSize="10"/>
+                            <TextBlock Text="TOPLAM DARA" Classes="StatLabel" FontSize="10"/>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding ToplamDara, StringFormat=N2}" FontSize="20" FontWeight="Bold" Foreground="Gray"/>
-                                <TextBlock Text=" kg" FontSize="12" Foreground="Gray" VerticalAlignment="Bottom" Margin="0,0,0,3"/>
+                                <TextBlock Text="{Binding ToplamDara, StringFormat=N2}" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                <TextBlock Text=" kg" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Bottom" Margin="0,0,0,3"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
-                    <Border Background="#4CAF50" CornerRadius="5" Padding="15,10">
+                    <Border Background="{DynamicResource SuccessBrush}" CornerRadius="5" Padding="15,10">
                         <StackPanel>
-                            <TextBlock Text="TOPLAM NET" Foreground="#a5d6a7" FontSize="10"/>
+                            <TextBlock Text="TOPLAM NET" Foreground="White" FontSize="10"/>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="{Binding ToplamNet, StringFormat=N2}" FontSize="20" FontWeight="Bold" Foreground="White"/>
                                 <TextBlock Text=" kg" FontSize="12" Foreground="White" VerticalAlignment="Bottom" Margin="0,0,0,3"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
-                    <Border Background="#FFC107" CornerRadius="5" Padding="15,10">
+                    <Border Background="{DynamicResource WarningBrush}" CornerRadius="5" Padding="15,10">
                         <StackPanel>
-                            <TextBlock Text="TOPLAM TUTAR" Foreground="#333" FontSize="10"/>
+                            <TextBlock Text="TOPLAM TUTAR" Foreground="White" FontSize="10"/>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding ToplamTutar, StringFormat=N2}" FontSize="20" FontWeight="Bold" Foreground="#333"/>
-                                <TextBlock Text=" ₺" FontSize="12" Foreground="#333" VerticalAlignment="Bottom" Margin="0,0,0,3"/>
+                                <TextBlock Text="{Binding ToplamTutar, StringFormat=N2}" FontSize="20" FontWeight="Bold" Foreground="White"/>
+                                <TextBlock Text=" ₺" FontSize="12" Foreground="White" VerticalAlignment="Bottom" Margin="0,0,0,3"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
@@ -258,20 +258,13 @@
                 <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
                     <Button Content="➕ Yeni Satır (F5)" 
                             Command="{Binding YeniSatirCommand}"
-                            Background="#333"
-                            Foreground="White"
-                            Padding="15,10"/>
+                            Classes="PrimaryButton"/>
                     <Button Content="İptal (ESC)" 
                             Command="{Binding CancelCommand}"
-                            Background="{DynamicResource BackgroundMediumBrush}"
-                            Foreground="White"
-                            Padding="15,10"/>
+                            Classes="SecondaryButton"/>
                     <Button Content="💾 Kaydet (F9)" 
                             Command="{Binding SaveCommand}"
-                            Background="#4CAF50"
-                            Foreground="White"
-                            FontWeight="Bold"
-                            Padding="25,10"/>
+                            Classes="SuccessButton"/>
                 </StackPanel>
             </Grid>
         </Border>

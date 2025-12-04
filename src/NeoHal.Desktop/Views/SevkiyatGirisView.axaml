@@ -11,11 +11,11 @@
     <Grid RowDefinitions="Auto,Auto,Auto,*,Auto,Auto">
         
         <!-- Üst Bar - Başlık -->
-        <Border Grid.Row="0" Background="{DynamicResource PrimaryBrush}" Padding="20,15">
+        <Border Grid.Row="0" Background="{DynamicResource BackgroundMediumBrush}" Padding="20,15" BorderBrush="#E5E5E5" BorderThickness="0,0,0,1">
             <Grid ColumnDefinitions="*,Auto">
                 <StackPanel>
-                    <TextBlock Text="🚛 ŞUBEYE SATIŞ FATURASI" FontSize="24" FontWeight="Bold" Foreground="White"/>
-                    <TextBlock Text="Şubeyi seç → Malları gir → Fatura kes" Foreground="#E0E0E0" FontSize="13"/>
+                    <TextBlock Text="🚛 ŞUBEYE SATIŞ FATURASI" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                    <TextBlock Text="Şubeyi seç → Malları gir → Fatura kes" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
                     <Button Content="📂 Taslaklar" Command="{Binding TaslakPaneliAcKapatCommand}" 
@@ -34,8 +34,8 @@
         </Border>
         
         <!-- Taslak Faturalar Paneli -->
-        <Border Grid.Row="1" Background="{DynamicResource BackgroundMediumBrush}" Padding="10" 
-                IsVisible="{Binding TaslakPanelAcik}">
+        <Border Grid.Row="1" Background="White" Padding="10" 
+                IsVisible="{Binding TaslakPanelAcik}" BorderBrush="#E5E5E5" BorderThickness="0,0,0,1">
             <Grid RowDefinitions="Auto,Auto">
                 <StackPanel Orientation="Horizontal" Spacing="10">
                     <TextBlock Text="📂 YARIM KALAN FATURALAR" FontWeight="Bold" Foreground="{DynamicResource WarningBrush}" VerticalAlignment="Center"/>
@@ -75,7 +75,7 @@
         </Border>
         
         <!-- Fatura Bilgileri -->
-        <Border Grid.Row="2" Background="{DynamicResource BackgroundMediumBrush}" Padding="15">
+        <Border Grid.Row="2" Background="White" Padding="15" BorderBrush="#E5E5E5" BorderThickness="0,0,0,1">
             <Grid ColumnDefinitions="Auto,200,30,Auto,200,30,Auto,200,30,Auto,*">
                 <TextBlock Text="Şube:" VerticalAlignment="Center" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold"/>
                 <ComboBox Grid.Column="1" 
@@ -235,7 +235,7 @@
         </Border>
         
         <!-- Alt Özet - Masraflar -->
-        <Border Grid.Row="4" Background="{DynamicResource BackgroundMediumBrush}" Padding="15">
+        <Border Grid.Row="4" Background="White" Padding="15" BorderBrush="#E5E5E5" BorderThickness="0,1,0,0">
             <Grid ColumnDefinitions="Auto,150,30,Auto,300,*,Auto,Auto,Auto,Auto,Auto">
                 <!-- Sol: Masraf Ekleme -->
                 <TextBlock Text="Ek Masraflar:" VerticalAlignment="Center" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="Bold"/>
@@ -277,7 +277,7 @@
         </Border>
         
         <!-- En Alt: Kısayol Bilgisi -->
-        <Border Grid.Row="5" Background="{DynamicResource BackgroundLightBrush}" Padding="10,8">
+        <Border Grid.Row="5" Background="White" Padding="10,8" BorderBrush="#E5E5E5" BorderThickness="0,1,0,0">
             <Grid ColumnDefinitions="*,Auto">
                 <TextBlock Text="F2: Şube | F3: Yeni | F5: Kaydet | Enter: Satır Geç | ✂️ FATURA KES: Kaydet + Yazdır"
                            Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NeoHal.Services")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+80eb5d763e15ccac1c9d9690f91df7a44b03d860")]
 [assembly: System.Reflection.AssemblyProductAttribute("NeoHal.Services")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NeoHal.Services")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

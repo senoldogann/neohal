@@ -97,7 +97,7 @@
                     <!-- Navigation Menu -->
                     <ScrollViewer>
                         <StackPanel Spacing="4" Margin="16,10">
-                            <Button Classes="NavButton" Command="{Binding GoToDashboardCommand}">
+                            <Button Classes="NavButton" Classes.Active="{Binding CurrentViewModel, Converter={StaticResource ActivePageConverter}, ConverterParameter=Dashboard}" Command="{Binding GoToDashboardCommand}">
                                 <StackPanel Orientation="Horizontal" Spacing="12">
                                     <TextBlock Text="🏠"/>
                                     <TextBlock Text="Ana Sayfa"/>
@@ -106,21 +106,21 @@
                             
                             <TextBlock Text="OPERASYON" Classes="SectionTitle"/>
                             
-                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="HalKayit">
+                            <Button Classes="NavButton" Classes.Active="{Binding CurrentViewModel, Converter={StaticResource ActivePageConverter}, ConverterParameter=HalKayit}" Command="{Binding NavigateToCommand}" CommandParameter="HalKayit">
                                 <StackPanel Orientation="Horizontal" Spacing="12">
                                     <TextBlock Text="📥"/>
                                     <TextBlock Text="Hal Kayıt (Alış)"/>
                                 </StackPanel>
                             </Button>
                             
-                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="SevkiyatGiris">
+                            <Button Classes="NavButton" Classes.Active="{Binding CurrentViewModel, Converter={StaticResource ActivePageConverter}, ConverterParameter=SevkiyatGiris}" Command="{Binding NavigateToCommand}" CommandParameter="SevkiyatGiris">
                                 <StackPanel Orientation="Horizontal" Spacing="12">
                                     <TextBlock Text="🚛"/>
                                     <TextBlock Text="Şubeye Satış"/>
                                 </StackPanel>
                             </Button>
                             
-                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="HizliSatis">
+                            <Button Classes="NavButton" Classes.Active="{Binding CurrentViewModel, Converter={StaticResource ActivePageConverter}, ConverterParameter=HizliSatis}" Command="{Binding NavigateToCommand}" CommandParameter="HizliSatis">
                                 <StackPanel Orientation="Horizontal" Spacing="12">
                                     <TextBlock Text="⚡"/>
                                     <TextBlock Text="Hızlı Satış"/>
@@ -129,21 +129,21 @@
 
                             <TextBlock Text="BELGELER" Classes="SectionTitle"/>
 
-                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="GirisIrsaliye">
+                            <Button Classes="NavButton" Classes.Active="{Binding CurrentViewModel, Converter={StaticResource ActivePageConverter}, ConverterParameter=GirisIrsaliye}" Command="{Binding NavigateToCommand}" CommandParameter="GirisIrsaliye">
                                 <StackPanel Orientation="Horizontal" Spacing="12">
                                     <TextBlock Text="📋"/>
                                     <TextBlock Text="Giriş İrsaliyesi"/>
                                 </StackPanel>
                             </Button>
                             
-                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="SatisFatura">
+                            <Button Classes="NavButton" Classes.Active="{Binding CurrentViewModel, Converter={StaticResource ActivePageConverter}, ConverterParameter=SatisFatura}" Command="{Binding NavigateToCommand}" CommandParameter="SatisFatura">
                                 <StackPanel Orientation="Horizontal" Spacing="12">
                                     <TextBlock Text="🧾"/>
                                     <TextBlock Text="Satış Faturası"/>
                                 </StackPanel>
                             </Button>
 
-                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="FaturaListesi">
+                            <Button Classes="NavButton" Classes.Active="{Binding CurrentViewModel, Converter={StaticResource ActivePageConverter}, ConverterParameter=FaturaListesi}" Command="{Binding NavigateToCommand}" CommandParameter="FaturaListesi">
                                 <StackPanel Orientation="Horizontal" Spacing="12">
                                     <TextBlock Text="📂"/>
                                     <TextBlock Text="Fatura Listesi"/>
@@ -152,28 +152,28 @@
                             
                             <TextBlock Text="YÖNETİM" Classes="SectionTitle"/>
                             
-                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="CariHesaplar">
+                            <Button Classes="NavButton" Classes.Active="{Binding CurrentViewModel, Converter={StaticResource ActivePageConverter}, ConverterParameter=CariHesaplar}" Command="{Binding NavigateToCommand}" CommandParameter="CariHesaplar">
                                 <StackPanel Orientation="Horizontal" Spacing="12">
                                     <TextBlock Text="👥"/>
                                     <TextBlock Text="Cari Hesaplar"/>
                                 </StackPanel>
                             </Button>
                             
-                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="Urunler">
+                            <Button Classes="NavButton" Classes.Active="{Binding CurrentViewModel, Converter={StaticResource ActivePageConverter}, ConverterParameter=Urunler}" Command="{Binding NavigateToCommand}" CommandParameter="Urunler">
                                 <StackPanel Orientation="Horizontal" Spacing="12">
                                     <TextBlock Text="🍅"/>
                                     <TextBlock Text="Ürünler"/>
                                 </StackPanel>
                             </Button>
                             
-                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="StokDurumu">
+                            <Button Classes="NavButton" Classes.Active="{Binding CurrentViewModel, Converter={StaticResource ActivePageConverter}, ConverterParameter=StokDurumu}" Command="{Binding NavigateToCommand}" CommandParameter="StokDurumu">
                                 <StackPanel Orientation="Horizontal" Spacing="12">
                                     <TextBlock Text="📦"/>
                                     <TextBlock Text="Stok Durumu"/>
                                 </StackPanel>
                             </Button>
 
-                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="KasaTakip">
+                            <Button Classes="NavButton" Classes.Active="{Binding CurrentViewModel, Converter={StaticResource ActivePageConverter}, ConverterParameter=KasaTakip}" Command="{Binding NavigateToCommand}" CommandParameter="KasaTakip">
                                 <StackPanel Orientation="Horizontal" Spacing="12">
                                     <TextBlock Text="🔄"/>
                                     <TextBlock Text="Kasa Takip"/>
@@ -182,14 +182,14 @@
                             
                             <TextBlock Text="FİNANS" Classes="SectionTitle"/>
                             
-                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="KasaHesabi">
+                            <Button Classes="NavButton" Classes.Active="{Binding CurrentViewModel, Converter={StaticResource ActivePageConverter}, ConverterParameter=KasaHesabi}" Command="{Binding NavigateToCommand}" CommandParameter="KasaHesabi">
                                 <StackPanel Orientation="Horizontal" Spacing="12">
                                     <TextBlock Text="💰"/>
                                     <TextBlock Text="Kasa Hesabı"/>
                                 </StackPanel>
                             </Button>
                             
-                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="CariExtre">
+                            <Button Classes="NavButton" Classes.Active="{Binding CurrentViewModel, Converter={StaticResource ActivePageConverter}, ConverterParameter=CariExtre}" Command="{Binding NavigateToCommand}" CommandParameter="CariExtre">
                                 <StackPanel Orientation="Horizontal" Spacing="12">
                                     <TextBlock Text="💳"/>
                                     <TextBlock Text="Cari Ekstre"/>
@@ -198,14 +198,14 @@
                             
                             <TextBlock Text="RAPORLAR" Classes="SectionTitle"/>
                             
-                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="RaporMerkezi">
+                            <Button Classes="NavButton" Classes.Active="{Binding CurrentViewModel, Converter={StaticResource ActivePageConverter}, ConverterParameter=RaporMerkezi}" Command="{Binding NavigateToCommand}" CommandParameter="RaporMerkezi">
                                 <StackPanel Orientation="Horizontal" Spacing="12">
                                     <TextBlock Text="📊"/>
                                     <TextBlock Text="Rapor Merkezi"/>
                                 </StackPanel>
                             </Button>
 
-                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="GunlukRapor">
+                            <Button Classes="NavButton" Classes.Active="{Binding CurrentViewModel, Converter={StaticResource ActivePageConverter}, ConverterParameter=GunlukRapor}" Command="{Binding NavigateToCommand}" CommandParameter="GunlukRapor">
                                 <StackPanel Orientation="Horizontal" Spacing="12">
                                     <TextBlock Text="📈"/>
                                     <TextBlock Text="Günlük Rapor"/>
@@ -214,14 +214,14 @@
                             
                             <TextBlock Text="SİSTEM" Classes="SectionTitle"/>
                             
-                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="Kullanicilar">
+                            <Button Classes="NavButton" Classes.Active="{Binding CurrentViewModel, Converter={StaticResource ActivePageConverter}, ConverterParameter=Kullanicilar}" Command="{Binding NavigateToCommand}" CommandParameter="Kullanicilar">
                                 <StackPanel Orientation="Horizontal" Spacing="12">
                                     <TextBlock Text="🔐"/>
                                     <TextBlock Text="Kullanıcılar"/>
                                 </StackPanel>
                             </Button>
                             
-                            <Button Classes="NavButton" Command="{Binding NavigateToCommand}" CommandParameter="Yedekleme">
+                            <Button Classes="NavButton" Classes.Active="{Binding CurrentViewModel, Converter={StaticResource ActivePageConverter}, ConverterParameter=Yedekleme}" Command="{Binding NavigateToCommand}" CommandParameter="Yedekleme">
                                 <StackPanel Orientation="Horizontal" Spacing="12">
                                     <TextBlock Text="💾"/>
                                     <TextBlock Text="Yedekleme"/>

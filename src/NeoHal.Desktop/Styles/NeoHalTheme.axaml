@@ -69,8 +69,10 @@
         <Setter Property="BorderBrush" Value="#000000"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="CornerRadius" Value="6"/>
-        <Setter Property="Padding" Value="10,6"/>
+        <Setter Property="Padding" Value="6,4"/>
         <Setter Property="Height" Value="36"/>
+        <Setter Property="MinWidth" Value="240"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
     </Style>
     <Style Selector="DatePicker:pointerover /template/ Border#Background">
         <Setter Property="BorderBrush" Value="#2563EB"/>
@@ -161,6 +163,14 @@
         <Setter Property="Padding" Value="15,8"/>
         <Setter Property="FontWeight" Value="Bold"/>
     </Style>
+
+    <!-- Bilgi Butonu -->
+    <Style Selector="Button.InfoButton">
+        <Setter Property="Background" Value="{DynamicResource InfoBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Padding" Value="15,8"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
     
     <!-- Tehlike Butonu -->
     <Style Selector="Button.DangerButton">
@@ -168,6 +178,20 @@
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="Padding" Value="15,8"/>
         <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
+
+    <!-- İkincil/İptal Butonu -->
+    <Style Selector="Button.SecondaryButton">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+        <Setter Property="BorderBrush" Value="#D1D5DB"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="15,8"/>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+    </Style>
+    <Style Selector="Button.SecondaryButton:pointerover">
+        <Setter Property="Background" Value="#F3F4F6"/>
     </Style>
     
     <!-- Navigasyon Butonu (Sidebar) -->

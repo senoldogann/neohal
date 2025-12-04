@@ -32,3 +32,4 @@
 /Users/dogan/Desktop/HAL-PROJEM/NeoHal/src/NeoHal.Data/obj/Debug/net9.0/NeoHal.Data.pdb
 /Users/dogan/Desktop/HAL-PROJEM/NeoHal/src/NeoHal.Data/obj/Debug/net9.0/NeoHal.Data.genruntimeconfig.cache
 /Users/dogan/Desktop/HAL-PROJEM/NeoHal/src/NeoHal.Data/obj/Debug/net9.0/ref/NeoHal.Data.dll
+/Users/dogan/Desktop/HAL-PROJEM/NeoHal/src/NeoHal.Data/obj/Debug/net9.0/NeoHal.Data.sourcelink.json

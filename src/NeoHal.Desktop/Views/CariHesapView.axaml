@@ -10,7 +10,7 @@
     <Grid RowDefinitions="Auto,*,Auto">
         
         <!-- Toolbar -->
-        <Border Grid.Row="0" Background="{DynamicResource BackgroundMediumBrush}" Padding="10">
+        <Border Grid.Row="0" Background="{DynamicResource BackgroundMediumBrush}" Padding="10" BorderBrush="#E5E5E5" BorderThickness="0,0,0,1">
             <StackPanel Orientation="Horizontal" Spacing="10">
                 <Button Content="+ Yeni" Command="{Binding NewCariCommand}" 
                         Background="{DynamicResource PrimaryBrush}" Foreground="White"/>
@@ -19,7 +19,7 @@
                 <Button Content="Sil" Command="{Binding DeleteCariCommand}"
                         IsEnabled="{Binding SelectedCariHesap, Converter={x:Static ObjectConverters.IsNotNull}}"
                         Background="#F44336" Foreground="White"/>
-                <Separator Width="1" Background="Gray" Margin="10,0"/>
+                <Separator Width="1" Background="#E5E5E5" Margin="10,0"/>
                 
                 <!-- Filtreler -->
                 <ComboBox PlaceholderText="Tümü" Width="150"
@@ -44,6 +44,10 @@
                       AutoGenerateColumns="False"
                       IsReadOnly="True"
                       GridLinesVisibility="Horizontal"
+                      BorderThickness="1"
+                      BorderBrush="#E5E5E5"
+                      Background="White"
+                      RowBackground="White"
                       Margin="10">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Kod" Binding="{Binding Kod}" Width="100" MinWidth="60"/>
@@ -58,54 +62,56 @@
 
             <!-- Düzenleme Paneli -->
             <Border Grid.Column="1" 
-                    Background="{DynamicResource BackgroundDarkBrush}" 
+                    Background="White" 
                     Width="350" 
                     Padding="15"
+                    BorderBrush="#E5E5E5"
+                    BorderThickness="1,0,0,0"
                     IsVisible="{Binding IsEditing}">
                 <ScrollViewer>
                     <StackPanel Spacing="10">
                         <TextBlock Text="{Binding IsNewRecord, Converter={x:Static StringConverters.IsNullOrEmpty}, 
                                    ConverterParameter='Yeni Cari Hesap|Cari Düzenle'}" 
-                                   FontSize="18" FontWeight="Bold" Foreground="White"/>
+                                   FontSize="18" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
                         
-                        <TextBlock Text="Cari Tipi" Foreground="Gray"/>
+                        <TextBlock Text="Cari Tipi" Foreground="{DynamicResource TextSecondaryBrush}"/>
                         <ComboBox ItemsSource="{Binding CariTipleri}"
                                   SelectedValue="{Binding EditingCari.CariTipi}"
                                   DisplayMemberBinding="{Binding DisplayName}"
                                   SelectedValueBinding="{Binding Value}"
                                   HorizontalAlignment="Stretch"/>
 
-                        <TextBlock Text="Kod" Foreground="Gray"/>
-                        <TextBox Text="{Binding EditingCari.Kod}" IsReadOnly="True" Background="#333"/>
+                        <TextBlock Text="Kod" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                        <TextBox Text="{Binding EditingCari.Kod}" IsReadOnly="True" Background="{DynamicResource BackgroundMediumBrush}"/>
 
-                        <TextBlock Text="Ünvan *" Foreground="Gray"/>
+                        <TextBlock Text="Ünvan *" Foreground="{DynamicResource TextSecondaryBrush}"/>
                         <TextBox Text="{Binding EditingCari.Unvan}" Watermark="Firma/Kişi adı"/>
 
-                        <TextBlock Text="TC Kimlik No" Foreground="Gray"/>
+                        <TextBlock Text="TC Kimlik No" Foreground="{DynamicResource TextSecondaryBrush}"/>
                         <TextBox Text="{Binding EditingCari.TcKimlikNo}" Watermark="11 haneli TC" MaxLength="11"/>
 
-                        <TextBlock Text="Vergi No" Foreground="Gray"/>
+                        <TextBlock Text="Vergi No" Foreground="{DynamicResource TextSecondaryBrush}"/>
                         <TextBox Text="{Binding EditingCari.VergiNo}" Watermark="10 haneli VKN" MaxLength="11"/>
 
-                        <TextBlock Text="Vergi Dairesi" Foreground="Gray"/>
+                        <TextBlock Text="Vergi Dairesi" Foreground="{DynamicResource TextSecondaryBrush}"/>
                         <TextBox Text="{Binding EditingCari.VergiDairesi}"/>
 
-                        <TextBlock Text="Telefon" Foreground="Gray"/>
+                        <TextBlock Text="Telefon" Foreground="{DynamicResource TextSecondaryBrush}"/>
                         <TextBox Text="{Binding EditingCari.Telefon}" Watermark="0532 XXX XX XX"/>
 
-                        <TextBlock Text="Telefon 2" Foreground="Gray"/>
+                        <TextBlock Text="Telefon 2" Foreground="{DynamicResource TextSecondaryBrush}"/>
                         <TextBox Text="{Binding EditingCari.Telefon2}"/>
 
-                        <TextBlock Text="E-Posta" Foreground="Gray"/>
+                        <TextBlock Text="E-Posta" Foreground="{DynamicResource TextSecondaryBrush}"/>
                         <TextBox Text="{Binding EditingCari.Email}" Watermark="ornek@mail.com"/>
 
-                        <TextBlock Text="Adres" Foreground="Gray"/>
+                        <TextBlock Text="Adres" Foreground="{DynamicResource TextSecondaryBrush}"/>
                         <TextBox Text="{Binding EditingCari.Adres}" 
                                  TextWrapping="Wrap" 
                                  AcceptsReturn="True"
                                  Height="60"/>
 
-                        <TextBlock Text="HKS Sicil No" Foreground="Gray"/>
+                        <TextBlock Text="HKS Sicil No" Foreground="{DynamicResource TextSecondaryBrush}"/>
                         <TextBox Text="{Binding EditingCari.HksSicilNo}" Watermark="Ticaret Bakanlığı sicil no"/>
 
                         <CheckBox Content="Aktif" IsChecked="{Binding EditingCari.Aktif}"/>
@@ -121,8 +127,8 @@
         </Grid>
 
         <!-- Status Bar -->
-        <Border Grid.Row="2" Background="{DynamicResource PrimaryBrush}" Padding="10,5">
-            <TextBlock Text="{Binding StatusMessage}" Foreground="White"/>
+        <Border Grid.Row="2" Background="{DynamicResource BackgroundMediumBrush}" Padding="10,5" BorderBrush="#E5E5E5" BorderThickness="0,1,0,0">
+            <TextBlock Text="{Binding StatusMessage}" Foreground="{DynamicResource TextPrimaryBrush}"/>
         </Border>
     </Grid>
 </UserControl>

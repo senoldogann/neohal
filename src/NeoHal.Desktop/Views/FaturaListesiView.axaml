@@ -6,37 +6,36 @@
     
     <Grid RowDefinitions="Auto,Auto,*,Auto">
         <!-- Başlık -->
-        <Border Grid.Row="0" Background="{DynamicResource PrimaryBrush}" Padding="20,15">
+        <Border Grid.Row="0" Background="{DynamicResource BackgroundMediumBrush}" Padding="20,15" BorderBrush="#E5E5E5" BorderThickness="0,0,0,1">
             <Grid ColumnDefinitions="Auto,*,Auto">
                 <StackPanel Orientation="Horizontal" Spacing="10">
                     <TextBlock Text="📄" FontSize="24"/>
                     <TextBlock Text="FATURA LİSTESİ" FontSize="20" FontWeight="Bold" 
-                               VerticalAlignment="Center" Foreground="White"/>
+                               VerticalAlignment="Center" Foreground="{DynamicResource TextPrimaryBrush}"/>
                 </StackPanel>
                 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10">
                     <TextBlock Text="{Binding ToplamFaturaSayisi, StringFormat='Toplam: {0} fatura'}" 
-                               Foreground="White" VerticalAlignment="Center"/>
+                               Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
                 </StackPanel>
             </Grid>
         </Border>
         
         <!-- Filtreler -->
-        <Border Grid.Row="1" Background="{DynamicResource BackgroundMediumBrush}" Padding="15">
+        <Border Grid.Row="1" Background="White" Padding="15" BorderBrush="#E5E5E5" BorderThickness="0,0,0,1">
             <Grid ColumnDefinitions="Auto,200,30,Auto,200,30,Auto,200,30,Auto,*,Auto">
-                <TextBlock Text="Tarih:" VerticalAlignment="Center" Foreground="#aaa"/>
-                <DatePicker Grid.Column="1" SelectedDate="{Binding BaslangicTarihi}" Background="#333"/>
+                <TextBlock Text="Tarih:" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                <DatePicker Grid.Column="1" SelectedDate="{Binding BaslangicTarihi}"/>
                 
-                <TextBlock Grid.Column="3" Text="-" VerticalAlignment="Center" Foreground="#aaa"/>
-                <DatePicker Grid.Column="4" SelectedDate="{Binding BitisTarihi}" Background="#333"/>
+                <TextBlock Grid.Column="3" Text="-" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                <DatePicker Grid.Column="4" SelectedDate="{Binding BitisTarihi}"/>
                 
-                <TextBlock Grid.Column="6" Text="Müşteri:" VerticalAlignment="Center" Foreground="#aaa"/>
+                <TextBlock Grid.Column="6" Text="Müşteri:" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}"/>
                 <ComboBox Grid.Column="7" 
                           ItemsSource="{Binding Musteriler}"
                           SelectedItem="{Binding SeciliMusteri}"
                           PlaceholderText="Tüm müşteriler..."
-                          IsTextSearchEnabled="True"
-                          Background="#333">
+                          IsTextSearchEnabled="True">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Unvan}"/>
@@ -44,9 +43,9 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
                 
-                <TextBlock Grid.Column="9" Text="Ara:" VerticalAlignment="Center" Foreground="#aaa"/>
+                <TextBlock Grid.Column="9" Text="Ara:" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondaryBrush}"/>
                 <TextBox Grid.Column="10" Text="{Binding AramaMetni}" 
-                         Watermark="Fatura no, açıklama..." Background="#333" Margin="0,0,10,0"/>
+                         Watermark="Fatura no, açıklama..." Margin="0,0,10,0"/>
                 
                 <Button Grid.Column="11" Content="🔍 Ara" Command="{Binding AraCommand}"
                         Background="{DynamicResource PrimaryLightBrush}" Foreground="White" Padding="15,8"/>
@@ -54,7 +53,7 @@
         </Border>
         
         <!-- Fatura Listesi -->
-        <Border Grid.Row="2" Background="{DynamicResource BackgroundMediumBrush}" Padding="10">
+        <Border Grid.Row="2" Background="White" Padding="10">
             <Grid RowDefinitions="*,Auto">
                 <DataGrid ItemsSource="{Binding Faturalar}"
                           SelectedItem="{Binding SeciliFatura}"
@@ -63,11 +62,11 @@
                           CanUserReorderColumns="False"
                           GridLinesVisibility="Horizontal"
                           BorderThickness="1"
-                          BorderBrush="#444"
+                          BorderBrush="#E5E5E5"
                           IsReadOnly="True"
                           SelectionMode="Single"
-                          Background="{DynamicResource BackgroundMediumBrush}"
-                          RowBackground="{DynamicResource BackgroundMediumBrush}">
+                          Background="White"
+                          RowBackground="White">
                     
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Fatura No" Width="140" MinWidth="100" Binding="{Binding FaturaNo}"/>
@@ -82,8 +81,9 @@
                 </DataGrid>
                 
                 <!-- Seçili fatura için işlem butonları -->
-                <Border Grid.Row="1" Background="{DynamicResource BackgroundDarkBrush}" Padding="10" Margin="0,10,0,0"
-                        IsVisible="{Binding SeciliFatura, Converter={x:Static ObjectConverters.IsNotNull}}">
+                <Border Grid.Row="1" Background="{DynamicResource BackgroundMediumBrush}" Padding="10" Margin="0,10,0,0"
+                        IsVisible="{Binding SeciliFatura, Converter={x:Static ObjectConverters.IsNotNull}}"
+                        BorderBrush="#E5E5E5" BorderThickness="1" CornerRadius="6">
                     <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
                         <Button Content="✏️ Düzenle" Command="{Binding DuzenleSeciliCommand}"
                                 Background="#2196F3" Foreground="White" Padding="15,8"/>
@@ -97,28 +97,28 @@
         </Border>
         
         <!-- Alt Özet -->
-        <Border Grid.Row="3" Background="{DynamicResource BackgroundDarkBrush}" Padding="15">
+        <Border Grid.Row="3" Background="White" Padding="15" BorderBrush="#E5E5E5" BorderThickness="0,1,0,0">
             <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto">
-                <TextBlock Text="{Binding StatusMessage}" Foreground="#888" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding StatusMessage}" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
                 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="20" Margin="0,0,30,0">
                     <StackPanel>
-                        <TextBlock Text="Toplam Kap" Foreground="#888" FontSize="11"/>
-                        <TextBlock Text="{Binding ToplamKapOzet}" FontSize="16" Foreground="White"/>
+                        <TextBlock Text="Toplam Kap" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                        <TextBlock Text="{Binding ToplamKapOzet}" FontSize="16" Foreground="{DynamicResource TextPrimaryBrush}"/>
                     </StackPanel>
                     <StackPanel>
-                        <TextBlock Text="Toplam Kg" Foreground="#888" FontSize="11"/>
-                        <TextBlock Text="{Binding ToplamKgOzet, StringFormat=N2}" FontSize="16" Foreground="White"/>
+                        <TextBlock Text="Toplam Kg" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
+                        <TextBlock Text="{Binding ToplamKgOzet, StringFormat=N2}" FontSize="16" Foreground="{DynamicResource TextPrimaryBrush}"/>
                     </StackPanel>
                     <StackPanel>
-                        <TextBlock Text="Toplam Tutar" Foreground="#888" FontSize="11"/>
+                        <TextBlock Text="Toplam Tutar" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="11"/>
                         <TextBlock Text="{Binding ToplamTutarOzet, StringFormat=₺{0:N2}}" 
                                    FontSize="18" FontWeight="Bold" Foreground="#4CAF50"/>
                     </StackPanel>
                 </StackPanel>
                 
                 <Button Grid.Column="4" Content="↻ Yenile" Command="{Binding YenileCommand}"
-                        Background="#333" Padding="15,8"/>
+                        Background="{DynamicResource BackgroundMediumBrush}" Foreground="{DynamicResource TextPrimaryBrush}" Padding="15,8"/>
             </Grid>
         </Border>
     </Grid>

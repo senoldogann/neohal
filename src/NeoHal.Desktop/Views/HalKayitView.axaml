@@ -109,10 +109,12 @@
                     <DataGridTemplateColumn Header="Komisyoncu" Width="180" MinWidth="140">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:DataType="vm:HalKayitKalem">
-                                <StackPanel Orientation="Horizontal" Spacing="5" Margin="8,4">
-                                    <TextBlock Text="{Binding KomisyoncuKodu}" Foreground="{DynamicResource SuccessBrush}" FontSize="11"/>
-                                    <TextBlock Text="{Binding KomisyoncuAdi}" VerticalAlignment="Center"/>
-                                </StackPanel>
+                                <Border Background="White" BorderBrush="#E5E5E5" BorderThickness="1" CornerRadius="4" Margin="4,2" Padding="8,4">
+                                    <StackPanel Orientation="Horizontal" Spacing="5">
+                                        <TextBlock Text="{Binding KomisyoncuKodu}" Foreground="{DynamicResource SuccessBrush}" FontSize="11"/>
+                                        <TextBlock Text="{Binding KomisyoncuAdi}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                         <DataGridTemplateColumn.CellEditingTemplate>
@@ -140,10 +142,12 @@
                     <DataGridTemplateColumn Header="Ürün" Width="180" MinWidth="140">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:DataType="vm:HalKayitKalem">
-                                <StackPanel Orientation="Horizontal" Spacing="5" Margin="8,4">
-                                    <TextBlock Text="{Binding Urun.Kod}" Foreground="{DynamicResource TextMutedBrush}" FontSize="11"/>
-                                    <TextBlock Text="{Binding UrunAdi}" VerticalAlignment="Center"/>
-                                </StackPanel>
+                                <Border Background="White" BorderBrush="#E5E5E5" BorderThickness="1" CornerRadius="4" Margin="4,2" Padding="8,4">
+                                    <StackPanel Orientation="Horizontal" Spacing="5">
+                                        <TextBlock Text="{Binding Urun.Kod}" Foreground="{DynamicResource TextMutedBrush}" FontSize="11"/>
+                                        <TextBlock Text="{Binding UrunAdi}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                         <DataGridTemplateColumn.CellEditingTemplate>
@@ -171,7 +175,9 @@
                     <DataGridTemplateColumn Header="Kap Tipi" Width="120" MinWidth="100">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:DataType="vm:HalKayitKalem">
-                                <TextBlock Text="{Binding KapTipiAdi}" Padding="8,4" VerticalAlignment="Center"/>
+                                <Border Background="White" BorderBrush="#E5E5E5" BorderThickness="1" CornerRadius="4" Margin="4,2" Padding="8,4">
+                                    <TextBlock Text="{Binding KapTipiAdi}" VerticalAlignment="Center"/>
+                                </Border>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                         <DataGridTemplateColumn.CellEditingTemplate>
